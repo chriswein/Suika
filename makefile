@@ -1,0 +1,28 @@
+# Compiler
+CC = clang++
+
+# Compiler flags
+CFLAGS = -I./include -Wall -std=c++11
+
+# Frameworks
+FRAMEWORKS = -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL
+
+# Libraries
+LIBS = ./libs/libraylib.a ./libs/libbox2d.a
+
+# Source files
+SRC = main.cc
+
+# Output binary
+OUTPUT = suika
+
+all: $(OUTPUT)
+
+$(OUTPUT): $(SRC)
+	$(CC) $(CFLAGS) $(FRAMEWORKS) $^ $(LIBS) -o $@
+
+clean:
+	rm -f $(OUTPUT)
+
+.PHONY: clean
+

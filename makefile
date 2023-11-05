@@ -11,7 +11,7 @@ FRAMEWORKS = -framework CoreVideo -framework IOKit -framework Cocoa -framework G
 LIBS = ./libs/libraylib.a ./libs/libbox2d.a
 
 # Source files
-SRC = main.cc
+SRC = main.cc box.cc helpers.cc
 
 # Output binary
 OUTPUT = suika

@@ -1,6 +1,8 @@
 #pragma once
 #include "box2d.h"
 #include <memory>
+#define DEBUG true
+using namespace std;
 
 const int window_width = 460;
 const int window_height = 800;
@@ -24,8 +26,8 @@ int pixelYFromBox2d(float y);
 class GE
 {
 public:
-	void init(std::shared_ptr<b2World> world);
-	b2Body* body();
-	void draw();
-	void update();
+	 virtual void init(shared_ptr<b2World> world){};
+	 virtual b2Body* body(){return nullptr;};
+	 virtual void draw(){};
+	 virtual void update(){};
 };

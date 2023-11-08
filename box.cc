@@ -1,10 +1,6 @@
 
 #include "box.hh"
 
-template <typename T> int sgn(T val) {
-    return (T(0) < val) - (val < T(0));
-}
-
 Box::Box(int x, int y, int w, int h)
 {
 	this->x = x;

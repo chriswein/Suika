@@ -5,9 +5,10 @@
 #include <vector>
 #include "helpers.hh"
 #include "box.hh"
+#include "suika.hh"
 using namespace std;
 
-void drawLines()
+void drawGuideLines()
 {
 	for (int i = 0; i < window_width; i = i + 20)
 	{
@@ -33,16 +34,17 @@ int main(void)
 
 	groundBody->CreateFixture(&groundBox, 0.0f);
 
-	vector<shared_ptr<Box>> boxes;
+	vector<shared_ptr<GE>> boxes;
 	vector<shared_ptr<Box>> walls;
 	walls.push_back(shared_ptr<Box>(new Box(20, 40, 20, 720, true)));
 	walls.back()->init(world);
 	walls.push_back(shared_ptr<Box>(new Box(window_width - 40, 40, 20, 720, true)));
 	walls.back()->init(world);
-	boxes.push_back(shared_ptr<Box>(new Box(100, 100, 20, 20)));
-	boxes.push_back(shared_ptr<Box>(new Box(300, 100, 20, 20)));
-	boxes.push_back(shared_ptr<Box>(new Box(300, 300, 20, 20)));
-	boxes.push_back(shared_ptr<Box>(new Box(250, 100, 40, 40)));
+	boxes.push_back(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(300, 100, 20, 20)))));
+	boxes.push_back(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(100, 100, 20, 20)))));
+	boxes.push_back(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(300, 300, 20, 20)))));
+	boxes.push_back(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(250, 100, 40, 40)))));
+	boxes.push_back(dynamic_pointer_cast<GE>(shared_ptr<Suika>((new Suika(250, 100, 40)))));
 
 	for (int i = 0; i < boxes.size(); i++)
 	{
@@ -71,23 +73,23 @@ int main(void)
 		}
 
 		Vector2 mouse = GetMousePosition();
-		static float o = 0;
-		static int d = 0;
+		static float growth = 0;
+		static int delta = 0;
 		if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 		{
-			if (d > 5)
+			if (delta > 5)
 			{
-				d = 0;
+				delta = 0;
 				char str[100];
 				snprintf(str, 100, "%4.2f %4.2f", mouse.x, mouse.y);
 				DrawText(str, 20, 20, 20, BLACK);
-				boxes.insert(boxes.begin(), shared_ptr<Box>(new Box(
-												int(mouse.x - 10 - int(o / 2)),
-												int(mouse.y - 10 - int(o / 2)),
-												20 + int(o),
-												20 + int(o))));
+				boxes.insert(boxes.begin(), dynamic_pointer_cast<GE>(shared_ptr<Box>(new Box(
+												int(mouse.x - 10 - int(growth / 2)),
+												int(mouse.y - 10 - int(growth / 2)),
+												20 + int(growth),
+												20 + int(growth)))));
 				boxes.front()->init(world);
-				o += 0.0;
+				growth += 0.0;
 				if (boxes.size() > 1000)
 				{
 					boxes.pop_back();
@@ -95,10 +97,10 @@ int main(void)
 			}
 			else
 			{
-				d+=1;
+				delta+=1;
 			}
 		}
-		drawLines();
+		drawGuideLines();
 		EndDrawing();
 	}
 

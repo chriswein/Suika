@@ -7,6 +7,8 @@ using namespace std;
 
 class Box : public GE
 {
+
+public:	
 	b2Body* bodyref;
 	shared_ptr<b2World> world;
 	int x;
@@ -15,14 +17,11 @@ class Box : public GE
 	int h;
 	float angle;
 	bool stat;
-
-public:
 	Box(int x, int y, int w, int h);
 	Box(int x, int y, int w, int h, bool staticBox);
 	~Box();
-	void init(shared_ptr<b2World> world);
-
-	b2Body* body();
-	void draw();
-	void update();
+	void init(shared_ptr<b2World> world) override;
+	b2Body* body() override;
+	void draw() override;
+	void update() override;
 };

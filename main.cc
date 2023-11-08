@@ -34,6 +34,7 @@ int main(void)
 
 	groundBody->CreateFixture(&groundBox, 0.0f);
 
+	SuikaFactory sf;
 	vector<shared_ptr<GE>> boxes;
 	vector<shared_ptr<Box>> walls;
 	walls.push_back(shared_ptr<Box>(new Box(20, 40, 20, 720, true)));
@@ -44,7 +45,12 @@ int main(void)
 	boxes.push_back(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(100, 100, 20, 20)))));
 	boxes.push_back(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(300, 300, 20, 20)))));
 	boxes.push_back(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(250, 100, 40, 40)))));
-	boxes.push_back(dynamic_pointer_cast<GE>(shared_ptr<Suika>((new Suika(250, 100, 40)))));
+	boxes.push_back(dynamic_pointer_cast<GE>(
+		sf.create(Small,250,60)
+	));
+	boxes.push_back(dynamic_pointer_cast<GE>(
+		sf.create(Large,200,60)
+	));
 
 	for (int i = 0; i < boxes.size(); i++)
 	{
@@ -53,13 +59,14 @@ int main(void)
 
 	int32 velocityIterations = 6;
 	int32 positionIterations = 2;
-	SetTargetFPS(60);
+	int fps = 120;
+	SetTargetFPS(fps);
 	while (!WindowShouldClose())
 	{
 
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
-		world->Step(GetFrameTime(), velocityIterations, positionIterations);
+		world->Step(1/float(fps), velocityIterations, positionIterations);
 
 		for (auto wall : walls)
 		{
@@ -74,10 +81,11 @@ int main(void)
 
 		Vector2 mouse = GetMousePosition();
 		static float growth = 0;
+		static bool limit = false;
 		static int delta = 0;
 		if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 		{
-			if (delta > 5)
+			if (delta > 0 || !limit)
 			{
 				delta = 0;
 				char str[100];
@@ -97,7 +105,7 @@ int main(void)
 			}
 			else
 			{
-				delta+=1;
+				delta += 1;
 			}
 		}
 		drawGuideLines();

@@ -3,6 +3,7 @@
 #include "box2d.h"
 #include "raylib.h"
 #include <memory>
+#include <random>
 using namespace std;
 
 class Box : public GE

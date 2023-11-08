@@ -2,7 +2,7 @@
 CC = clang++
 
 # Compiler flags
-CFLAGS = -I./include -Wall -std=c++11
+CFLAGS = -I./include -Wall -std=c++11 -O3
 
 # Frameworks
 FRAMEWORKS = -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL
@@ -11,7 +11,7 @@ FRAMEWORKS = -framework CoreVideo -framework IOKit -framework Cocoa -framework G
 LIBS = ./libs/libraylib.a ./libs/libbox2d.a
 
 # Source files
-SRC = main.cc box.cc helpers.cc
+SRC = main.cc box.cc helpers.cc suika.cc
 
 # Output binary
 OUTPUT = suika

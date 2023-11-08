@@ -4,9 +4,9 @@
 #define DEBUG true
 using namespace std;
 
-const int window_width = 460;
+const int window_width = 800;
 const int window_height = 800;
-const float aspect = window_width / window_height;
+const float aspect = float(window_width) / float(window_height);
 const float b2_world_width = 20.0;
 const float b2_world_height = 20.0;
 const float b2_w_conv = b2_world_width / window_width;

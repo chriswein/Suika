@@ -38,15 +38,22 @@ void Box::init(shared_ptr<b2World> world)
 	bodyDef.position.Set(x, y);
 
 	this->bodyref = world->CreateBody(&bodyDef);
+	std::random_device rd;
+    std::mt19937 gen(rd());
 
+    // Define a distribution (e.g., uniform distribution between 1 and 100)
+    std::uniform_int_distribution<int> distribution(1, 100);
+
+    // Generate random numbers
+    int randomNumber = distribution(gen);
 	b2PolygonShape dynamicBox;
 	dynamicBox.SetAsBox(w / 2, h / 2);
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &dynamicBox;
 	if (!this->stat)
 	{
-		fixtureDef.density = 100.0f;
-		fixtureDef.friction = 0.3f;
+		fixtureDef.density = 100.0f+float(distribution(gen));
+		fixtureDef.friction = 0.3f+float(distribution(gen));
 	}
 
 	this->bodyref->CreateFixture(&fixtureDef);
@@ -68,7 +75,7 @@ void Box::update()
 	this->angle = this->bodyref->GetAngle() * (180.0 / M_PI);
 	this->x = pixelXFromBox2d(position.x);
 	this->y = pixelYFromBox2d(position.y);
-	char str[100];
+	// char str[100];
 	// snprintf(str, 100, "%i %i %4.2f %4.2f\n %4.2f %4.2f", this->x, this->y,
 	// 		 position.x, position.y, widthInBox2d(this->w) / 2, heightInBox2d(this->h) / 2);
 	// DrawText(str, 20 + this->x, 20 + this->y, 10, BLACK);

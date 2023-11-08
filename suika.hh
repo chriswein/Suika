@@ -6,10 +6,24 @@ class Suika : public Box
 {
 private:
     /* data */
-    float radius;
+    
+    
 public:
+    float radius;
+    Color color = RED;
     Suika(int x, int y, int radius);
     ~Suika();
     void init(shared_ptr<b2World> world) override;
     void draw() override;
+};
+
+enum Melon{
+    Small,
+    Middle,
+    Large
+};
+
+class SuikaFactory {
+    public: 
+        shared_ptr<Suika> create(Melon melon, int x , int y);
 };

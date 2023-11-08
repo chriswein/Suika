@@ -1,19 +1,19 @@
 #include "suika.hh"
 
-Suika::Suika(int x, int y, int radius) : Box(x,y,radius,radius)
+Suika::Suika(int x, int y, int radius) : Box(x, y, radius / 2, radius / 2)
 {
-   this->radius = radius;
+	this->radius = radius;
 }
 
-Suika::~Suika()
-{
+Suika::~Suika(){
+
 }
-void Suika::init(shared_ptr<b2World> world){
-	float x = coordinateXInBox2d(this->x+this->w/2);
-	float y = coordinateYInBox2d(this->y+this->h/2);
-	float w = widthInBox2d(this->w);
-	float h = heightInBox2d(this->h);
-	
+
+void Suika::init(shared_ptr<b2World> world)
+{
+	float x = coordinateXInBox2d(this->x);// + this->w / 2);
+	float y = coordinateYInBox2d(this->y);// + this->h / 2);
+
 	this->world = world;
 	b2BodyDef bodyDef;
 	if (!this->stat)
@@ -22,21 +22,50 @@ void Suika::init(shared_ptr<b2World> world){
 
 	this->bodyref = world->CreateBody(&bodyDef);
 
-	b2PolygonShape dynamicBox;
-	dynamicBox.SetAsBox(w / 2, h / 2);
+	b2CircleShape circle;
+	circle.m_radius = heightInBox2d(this->radius);
 	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &dynamicBox;
+	fixtureDef.shape = &circle;
 	if (!this->stat)
 	{
-		fixtureDef.density = 100.0f;
-		fixtureDef.friction = 0.3f;
+		fixtureDef.density = 200.0f;
+		fixtureDef.friction = 0.6f;
 	}
 
 	this->bodyref->CreateFixture(&fixtureDef);
 }
 
-void Suika::draw(){
-	Rectangle rec{float(this->x), float(this->y), float(this->w), float(this->h)};
-	Vector2 origin{float(this->w / 2), float(this->h / 2)};
-	DrawRectanglePro(rec, origin, this->angle, PURPLE);
+void Suika::draw()
+{
+	DrawCircle(this->x, this->y, this->radius, this->color);
+	#ifdef DEBUG
+		char str[100];
+		snprintf(str, 100, "%i %i", this->x, this->y);
+		DrawText(str, 40, 40, 20, BLACK);
+	#endif
+}
+
+shared_ptr<Suika> SuikaFactory::create(Melon melon, int x, int y)
+{
+	shared_ptr<Suika> a = shared_ptr<Suika>(new Suika(x,y,10));
+	switch (melon)
+	{
+	case Small:
+		a->radius = 10;
+		a->color = PURPLE;
+		break;
+	case Middle:
+		a->radius = 50;
+		a->color = YELLOW;
+		break;
+	case Large:
+		a->radius = 150;
+		a->color = GREEN;
+		break;
+	default:
+		a->radius = 10;
+		a->color = PURPLE;
+		break;
+	}
+	return a;
 }

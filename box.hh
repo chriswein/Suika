@@ -8,7 +8,8 @@ using namespace std;
 
 class Box : public GE
 {
-
+protected:
+	shared_ptr<GE_Id> gid;
 public:	
 	b2Body* bodyref;
 	shared_ptr<b2World> world;
@@ -25,4 +26,5 @@ public:
 	b2Body* body() override;
 	void draw() override;
 	void update() override;
+	shared_ptr<GE_Id> id() override;
 };

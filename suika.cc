@@ -3,6 +3,7 @@
 Suika::Suika(int x, int y, int radius) : Box(x, y, radius / 2, radius / 2)
 {
 	this->radius = radius;
+	this->gid->type = SUIKA;
 }
 
 Suika::~Suika(){
@@ -32,7 +33,7 @@ void Suika::init(shared_ptr<b2World> world)
 		fixtureDef.friction = 0.6f;
 	}
 
-	this->bodyref->CreateFixture(&fixtureDef);
+	this->bodyref->CreateFixture(&fixtureDef);	
 }
 
 void Suika::draw()
@@ -40,7 +41,7 @@ void Suika::draw()
 	DrawCircle(this->x, this->y, this->radius, this->color);
 	#ifdef DEBUG
 		char str[100];
-		snprintf(str, 100, "%i %i", this->x, this->y);
+		snprintf(str, 100, "%i %i \n id: %i type: %i", this->x, this->y, this->gid->id, this->gid->type);
 		DrawText(str, 40, 40, 20, BLACK);
 	#endif
 }

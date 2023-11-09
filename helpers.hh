@@ -11,6 +11,7 @@ const float b2_world_width = 20.0;
 const float b2_world_height = 20.0;
 const float b2_w_conv = b2_world_width / window_width;
 const float b2_h_conv = b2_world_height / window_height;
+static int GE_last_id = 0;
 
 
 float widthInBox2d(int w);
@@ -23,11 +24,25 @@ float coordinateYInBox2d(int y);
 int pixelXFromBox2d(float x);
 int pixelYFromBox2d(float y);
 
+enum GE_Type {
+	BOX,
+	SUIKA
+};
+
+typedef struct GE_Id {
+	int id;
+	GE_Type type;
+} GE_Id;
+
 class GE
 {
 public:
+	 virtual ~GE(){};
 	 virtual void init(shared_ptr<b2World> world){};
 	 virtual b2Body* body(){return nullptr;};
 	 virtual void draw(){};
 	 virtual void update(){};
+	 virtual shared_ptr<GE_Id> id(){return shared_ptr<GE_Id>(nullptr);};
 };
+
+

@@ -8,6 +8,8 @@ Box::Box(int x, int y, int w, int h)
 	this->w = w;
 	this->h = h;
 	this->stat = false;
+	GE_Id gid = {.id=++GE_last_id, .type=BOX};
+	this->gid = make_shared<GE_Id>(gid);
 }
 Box::Box(int x, int y, int w, int h, bool staticBox)
 {
@@ -16,6 +18,8 @@ Box::Box(int x, int y, int w, int h, bool staticBox)
 	this->w = w;
 	this->h = h;
 	this->stat = staticBox;
+	GE_Id gid = {.id=++GE_last_id, .type=BOX};
+	this->gid = make_shared<GE_Id>(gid);
 }
 Box::~Box()
 {
@@ -33,10 +37,15 @@ void Box::init(shared_ptr<b2World> world)
 	
 	this->world = world;
 	b2BodyDef bodyDef;
+	
+	b2BodyUserData data;
+	data.pointer = (uintptr_t)(this->gid.get());
+	bodyDef.userData = data;
+	
 	if (!this->stat)
 		bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(x, y);
-
+	
 	this->bodyref = world->CreateBody(&bodyDef);
 	std::random_device rd;
     std::mt19937 gen(rd());
@@ -44,8 +53,6 @@ void Box::init(shared_ptr<b2World> world)
     // Define a distribution (e.g., uniform distribution between 1 and 100)
     std::uniform_int_distribution<int> distribution(1, 100);
 
-    // Generate random numbers
-    int randomNumber = distribution(gen);
 	b2PolygonShape dynamicBox;
 	dynamicBox.SetAsBox(w / 2, h / 2);
 	b2FixtureDef fixtureDef;
@@ -57,6 +64,8 @@ void Box::init(shared_ptr<b2World> world)
 	}
 
 	this->bodyref->CreateFixture(&fixtureDef);
+	
+
 }
 
 b2Body *Box::body()
@@ -79,4 +88,8 @@ void Box::update()
 	// snprintf(str, 100, "%i %i %4.2f %4.2f\n %4.2f %4.2f", this->x, this->y,
 	// 		 position.x, position.y, widthInBox2d(this->w) / 2, heightInBox2d(this->h) / 2);
 	// DrawText(str, 20 + this->x, 20 + this->y, 10, BLACK);
+}
+
+shared_ptr<GE_Id> Box::id(){
+	return this->gid;
 }

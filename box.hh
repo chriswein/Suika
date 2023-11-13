@@ -19,6 +19,7 @@ public:
 	int h;
 	float angle;
 	bool stat;
+	Box(int, int y, int w, int h);
 	Box(int x, int y, int w, int h, shared_ptr<b2World> world);
 	Box(int x, int y, int w, int h, bool staticBox, shared_ptr<b2World> world);
 	~Box();

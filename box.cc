@@ -1,6 +1,17 @@
 
 #include "box.hh"
 
+Box::Box(int x, int y, int w, int h)
+{
+	this->x = x;
+	this->y = y;
+	this->w = w;
+	this->h = h;
+	this->stat = false;
+	GE_Id gid = {.id=++GE_last_id, .type=BOX};
+	this->gid = make_shared<GE_Id>(gid);
+}
+
 Box::Box(int x, int y, int w, int h, shared_ptr<b2World> world)
 {
 	this->x = x;

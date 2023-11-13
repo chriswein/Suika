@@ -1,12 +1,12 @@
 #include "suika.hh"
 
-Suika::Suika(int x, int y, int radius, shared_ptr<b2World> world) : Box(x, y, radius / 2, radius / 2, world)
+Suika::Suika(int x, int y, int radius, shared_ptr<b2World> world) : Box(x, y, radius / 2, radius / 2)
 {
 	this->x = x;
 	this->y = y;
 	this->radius = radius;
 	this->gid->type = SUIKA;
-	this->init(this->world);
+	this->init(world);
 }
 
 Suika::~Suika(){
@@ -45,31 +45,34 @@ void Suika::draw()
 	#ifdef DEBUG
 		char str[100];
 		snprintf(str, 100, "%i %i \n id: %i type: %i", this->x, this->y, this->gid->id, this->gid->type);
-		DrawText(str, 40, 40, 20, BLACK);
+		DrawText(str, 50, 40, 20, BLACK);
 	#endif
 }
 
 shared_ptr<Suika> SuikaFactory::create(Melon melon, int x, int y, shared_ptr<b2World> world)
 {
-	shared_ptr<Suika> a = shared_ptr<Suika>(new Suika(x,y,10,world));
+	int radius  = 10;
+	Color color = PURPLE;
 	switch (melon)
 	{
 	case Small:
-		a->radius = 10;
-		a->color = PURPLE;
+		radius = 10;
+		color = PURPLE;
 		break;
 	case Middle:
-		a->radius = 50;
-		a->color = YELLOW;
+		radius = 50;
+		color = YELLOW;
 		break;
 	case Large:
-		a->radius = 150;
-		a->color = GREEN;
+		radius = 150;
+		color = GREEN;
 		break;
 	default:
-		a->radius = 10;
-		a->color = PURPLE;
+		radius = 10;
+		color = PURPLE;
 		break;
 	}
+	shared_ptr<Suika> a = shared_ptr<Suika>(new Suika(x,y,radius,world));
+	a->color = color;
 	return a;
 }

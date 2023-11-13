@@ -53,7 +53,7 @@ int main(void)
 	gm->insertGE(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(300, 300, 20, 20,world)))));
 	gm->insertGE(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(250, 100, 40, 40,world)))));
 	gm->insertGE(dynamic_pointer_cast<GE>(
-		sf.create(Small,250,60, world)
+		sf.create(Small,200,10, world)
 	));
 	gm->insertGE(dynamic_pointer_cast<GE>(
 		sf.create(Large,200,60, world)
@@ -76,6 +76,12 @@ int main(void)
 		ClearBackground(RAYWHITE);
 		world->Step(1/float(fps), velocityIterations, positionIterations);
 
+		for (auto key : listener.GetDeletables()) // Remove all elements that where selected
+		{
+			gm->deleteGE(key);
+		}
+		
+
 		for (auto wall : walls)
 		{
 			wall->update();
@@ -93,7 +99,7 @@ int main(void)
 		static int delta = 0;
 		if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 		{
-			if (delta > 0 || !limit)
+			if (delta > 3 || !limit)
 			{
 				delta = 0;
 				char str[100];

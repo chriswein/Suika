@@ -19,8 +19,8 @@ public:
 	int h;
 	float angle;
 	bool stat;
-	Box(int x, int y, int w, int h);
-	Box(int x, int y, int w, int h, bool staticBox);
+	Box(int x, int y, int w, int h, shared_ptr<b2World> world);
+	Box(int x, int y, int w, int h, bool staticBox, shared_ptr<b2World> world);
 	~Box();
 	void init(shared_ptr<b2World> world) override;
 	b2Body* body() override;

@@ -1,6 +1,7 @@
 #pragma once
 #include "box2d.h"
 #include <memory>
+#include <map>
 #define DEBUG true
 using namespace std;
 
@@ -45,4 +46,14 @@ public:
 	 virtual shared_ptr<GE_Id> id(){return shared_ptr<GE_Id>(nullptr);};
 };
 
+class GEManager {
 
+public:
+    std::unordered_map<int, shared_ptr<GE>> geMap;
+    GEManager();
+
+    void insertGE(shared_ptr<GE> ge);
+    void deleteGE(int id);
+    void printAllGEs() const;
+
+};

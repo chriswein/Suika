@@ -55,3 +55,24 @@ int pixelYFromBox2d(float y)
 		return a;
 	}
 }
+
+GEManager::GEManager() {}
+
+void GEManager::insertGE(shared_ptr<GE>  ge) {
+    this->geMap[ge->id()->id] = ge;
+}
+
+void GEManager::deleteGE(int id) {
+    int key = id;
+    auto it = this->geMap.find(key);
+    if (it != this->geMap.end()) {
+        this->geMap.erase(it);
+    } 
+}
+
+void GEManager::printAllGEs() const {
+    for (const auto& pair : this->geMap) {
+        int key = pair.first;
+        shared_ptr<GE> ge = pair.second;
+    }
+}

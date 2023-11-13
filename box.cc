@@ -1,7 +1,7 @@
 
 #include "box.hh"
 
-Box::Box(int x, int y, int w, int h)
+Box::Box(int x, int y, int w, int h, shared_ptr<b2World> world)
 {
 	this->x = x;
 	this->y = y;
@@ -10,8 +10,10 @@ Box::Box(int x, int y, int w, int h)
 	this->stat = false;
 	GE_Id gid = {.id=++GE_last_id, .type=BOX};
 	this->gid = make_shared<GE_Id>(gid);
+	this->world = world;
+	this->init(world);
 }
-Box::Box(int x, int y, int w, int h, bool staticBox)
+Box::Box(int x, int y, int w, int h, bool staticBox, shared_ptr<b2World> world)
 {
 	this->x = x;
 	this->y = y;
@@ -20,6 +22,8 @@ Box::Box(int x, int y, int w, int h, bool staticBox)
 	this->stat = staticBox;
 	GE_Id gid = {.id=++GE_last_id, .type=BOX};
 	this->gid = make_shared<GE_Id>(gid);
+	this->world = world;
+	this->init(world);
 }
 Box::~Box()
 {
@@ -84,6 +88,7 @@ void Box::update()
 	this->angle = this->bodyref->GetAngle() * (180.0 / M_PI);
 	this->x = pixelXFromBox2d(position.x);
 	this->y = pixelYFromBox2d(position.y);
+	// this->bodyref->GetContactList()->contact-
 	// char str[100];
 	// snprintf(str, 100, "%i %i %4.2f %4.2f\n %4.2f %4.2f", this->x, this->y,
 	// 		 position.x, position.y, widthInBox2d(this->w) / 2, heightInBox2d(this->h) / 2);

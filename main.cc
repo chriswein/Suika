@@ -6,7 +6,11 @@
 #include "helpers.hh"
 #include "box.hh"
 #include "suika.hh"
+#include "contactlistener.hh"
+
 using namespace std;
+
+
 
 void drawGuideLines()
 {
@@ -35,27 +39,31 @@ int main(void)
 	groundBody->CreateFixture(&groundBox, 0.0f);
 
 	SuikaFactory sf;
+	auto gm = shared_ptr<GEManager>(new GEManager);
+	shared_ptr<GEManager> p(gm);
+	contactlistener listener = contactlistener(p);
 	vector<shared_ptr<GE>> boxes;
 	vector<shared_ptr<Box>> walls;
-	walls.push_back(shared_ptr<Box>(new Box(20, 40, 20, 720, true)));
-	walls.back()->init(world);
-	walls.push_back(shared_ptr<Box>(new Box(window_width - 40, 40, 20, 720, true)));
-	walls.back()->init(world);
-	boxes.push_back(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(300, 100, 20, 20)))));
-	boxes.push_back(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(100, 100, 20, 20)))));
-	boxes.push_back(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(300, 300, 20, 20)))));
-	boxes.push_back(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(250, 100, 40, 40)))));
-	boxes.push_back(dynamic_pointer_cast<GE>(
-		sf.create(Small,250,60)
+	walls.push_back(shared_ptr<Box>(new Box(20, 40, 20, 720, true, world)));
+	// walls.back()->init(world);
+	walls.push_back(shared_ptr<Box>(new Box(window_width - 40, 40, 20, 720, true, world)));
+	// walls.back()->init(world);
+	gm->insertGE(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(300, 100, 20, 20,world)))));
+	gm->insertGE(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(100, 100, 20, 20,world)))));
+	gm->insertGE(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(300, 300, 20, 20,world)))));
+	gm->insertGE(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(250, 100, 40, 40,world)))));
+	gm->insertGE(dynamic_pointer_cast<GE>(
+		sf.create(Small,250,60, world)
 	));
-	boxes.push_back(dynamic_pointer_cast<GE>(
-		sf.create(Large,200,60)
+	gm->insertGE(dynamic_pointer_cast<GE>(
+		sf.create(Large,200,60, world)
 	));
 
-	for (int i = 0; i < boxes.size(); i++)
-	{
-		boxes[i]->init(world);
-	}
+	// for (auto i = gm->geMap.begin(); i != gm->geMap.end(); i++)
+	// {
+	// 	i->second->init(world);
+	// }
+	world->SetContactListener((b2ContactListener*)&listener);
 
 	int32 velocityIterations = 6;
 	int32 positionIterations = 2;
@@ -73,10 +81,10 @@ int main(void)
 			wall->update();
 			wall->draw();
 		}
-		for (int i = 0; i < boxes.size(); i++)
+		for (auto pair : gm->geMap)
 		{
-			boxes[i]->update();
-			boxes[i]->draw();
+			pair.second->update();
+			pair.second->draw();
 		}
 
 		Vector2 mouse = GetMousePosition();
@@ -91,17 +99,20 @@ int main(void)
 				char str[100];
 				snprintf(str, 100, "%4.2f %4.2f", mouse.x, mouse.y);
 				DrawText(str, 20, 20, 20, BLACK);
-				boxes.insert(boxes.begin(), dynamic_pointer_cast<GE>(shared_ptr<Box>(new Box(
+				auto element = dynamic_pointer_cast<GE>(shared_ptr<Box>(new Box(
 												int(mouse.x - 10 - int(growth / 2)),
 												int(mouse.y - 10 - int(growth / 2)),
 												20 + int(growth),
-												20 + int(growth)))));
-				boxes.front()->init(world);
+												20 + int(growth),
+												world)));
+				// element->init(world);
+				gm->insertGE(element );
+			
 				growth += 0.0;
-				if (boxes.size() > 1000)
-				{
-					boxes.pop_back();
-				}
+				// if (boxes.size() > 1000)
+				// {
+				// 	boxes.pop_back();
+				// }
 			}
 			else
 			{

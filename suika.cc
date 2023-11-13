@@ -1,9 +1,12 @@
 #include "suika.hh"
 
-Suika::Suika(int x, int y, int radius) : Box(x, y, radius / 2, radius / 2)
+Suika::Suika(int x, int y, int radius, shared_ptr<b2World> world) : Box(x, y, radius / 2, radius / 2, world)
 {
+	this->x = x;
+	this->y = y;
 	this->radius = radius;
 	this->gid->type = SUIKA;
+	this->init(this->world);
 }
 
 Suika::~Suika(){
@@ -46,9 +49,9 @@ void Suika::draw()
 	#endif
 }
 
-shared_ptr<Suika> SuikaFactory::create(Melon melon, int x, int y)
+shared_ptr<Suika> SuikaFactory::create(Melon melon, int x, int y, shared_ptr<b2World> world)
 {
-	shared_ptr<Suika> a = shared_ptr<Suika>(new Suika(x,y,10));
+	shared_ptr<Suika> a = shared_ptr<Suika>(new Suika(x,y,10,world));
 	switch (melon)
 	{
 	case Small:

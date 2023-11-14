@@ -14,7 +14,6 @@ const float b2_w_conv = b2_world_width / window_width;
 const float b2_h_conv = b2_world_height / window_height;
 static int GE_last_id = 0;
 
-
 float widthInBox2d(int w);
 
 float heightInBox2d(int h);
@@ -25,35 +24,46 @@ float coordinateYInBox2d(int y);
 int pixelXFromBox2d(float x);
 int pixelYFromBox2d(float y);
 
-enum GE_Type {
-	BOX,
-	SUIKA
-};
+#undef ORANGE // Defined by Raylib
 
-typedef struct GE_Id {
+namespace Fruits
+{
+	enum GE_Type
+	{
+		BOX,
+		TANGERINE,
+		ORANGE,
+		GRAPEFRUIT,
+		MELON,
+		SUIKA
+	};
+}
+
+typedef struct GE_Id
+{
 	int id;
-	GE_Type type;
+	Fruits::GE_Type type;
 } GE_Id;
 
 class GE
 {
 public:
-	 virtual ~GE(){};
-	 virtual void init(shared_ptr<b2World> world){};
-	 virtual b2Body* body(){return nullptr;};
-	 virtual void draw(){};
-	 virtual void update(){};
-	 virtual shared_ptr<GE_Id> id(){return shared_ptr<GE_Id>(nullptr);};
+	virtual ~GE(){};
+	virtual void init(shared_ptr<b2World> world){};
+	virtual b2Body *body() { return nullptr; };
+	virtual void draw(){};
+	virtual void update(){};
+	virtual shared_ptr<GE_Id> id() { return shared_ptr<GE_Id>(nullptr); };
 };
 
-class GEManager {
+class GEManager
+{
 
 public:
-    std::unordered_map<int, shared_ptr<GE>> geMap;
-    GEManager();
+	std::unordered_map<int, shared_ptr<GE>> geMap;
+	GEManager();
 
-    void insertGE(shared_ptr<GE> ge);
-    void deleteGE(int id);
-    void printAllGEs() const;
-
+	void insertGE(shared_ptr<GE> ge);
+	void deleteGE(int id);
+	void printAllGEs() const;
 };

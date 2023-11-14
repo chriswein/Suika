@@ -8,7 +8,7 @@ Box::Box(int x, int y, int w, int h)
 	this->w = w;
 	this->h = h;
 	this->stat = false;
-	GE_Id gid = {.id=++GE_last_id, .type=BOX};
+	GE_Id gid = {.id=++GE_last_id, .type=Fruits::BOX};
 	this->gid = make_shared<GE_Id>(gid);
 }
 
@@ -19,7 +19,7 @@ Box::Box(int x, int y, int w, int h, shared_ptr<b2World> world)
 	this->w = w;
 	this->h = h;
 	this->stat = false;
-	GE_Id gid = {.id=++GE_last_id, .type=BOX};
+	GE_Id gid = {.id=++GE_last_id, .type=Fruits::BOX};
 	this->gid = make_shared<GE_Id>(gid);
 	this->world = world;
 	this->init(world);
@@ -31,7 +31,7 @@ Box::Box(int x, int y, int w, int h, bool staticBox, shared_ptr<b2World> world)
 	this->w = w;
 	this->h = h;
 	this->stat = staticBox;
-	GE_Id gid = {.id=++GE_last_id, .type=BOX};
+	GE_Id gid = {.id=++GE_last_id, .type=Fruits::BOX};
 	this->gid = make_shared<GE_Id>(gid);
 	this->world = world;
 	this->init(world);

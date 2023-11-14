@@ -10,8 +10,6 @@
 
 using namespace std;
 
-
-
 void drawGuideLines()
 {
 	for (int i = 0; i < window_width; i = i + 20)
@@ -45,25 +43,18 @@ int main(void)
 	vector<shared_ptr<GE>> boxes;
 	vector<shared_ptr<Box>> walls;
 	walls.push_back(shared_ptr<Box>(new Box(20, 40, 20, 720, true, world)));
-	// walls.back()->init(world);
 	walls.push_back(shared_ptr<Box>(new Box(window_width - 40, 40, 20, 720, true, world)));
-	// walls.back()->init(world);
-	gm->insertGE(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(300, 100, 20, 20,world)))));
-	gm->insertGE(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(100, 100, 20, 20,world)))));
-	gm->insertGE(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(300, 300, 20, 20,world)))));
-	gm->insertGE(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(250, 100, 40, 40,world)))));
-	gm->insertGE(dynamic_pointer_cast<GE>(
-		sf.create(Small,200,10, world)
-	));
-	gm->insertGE(dynamic_pointer_cast<GE>(
-		sf.create(Large,200,60, world)
-	));
 
-	// for (auto i = gm->geMap.begin(); i != gm->geMap.end(); i++)
-	// {
-	// 	i->second->init(world);
-	// }
-	world->SetContactListener((b2ContactListener*)&listener);
+	gm->insertGE(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(300, 100, 20, 20, world)))));
+	gm->insertGE(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(100, 100, 20, 20, world)))));
+	gm->insertGE(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(300, 300, 20, 20, world)))));
+	gm->insertGE(dynamic_pointer_cast<GE>(shared_ptr<Box>((new Box(250, 100, 40, 40, world)))));
+	gm->insertGE(dynamic_pointer_cast<GE>(
+		sf.create(Small, 200, 10, world)));
+	gm->insertGE(dynamic_pointer_cast<GE>(
+		sf.create(Large, 200, 60, world)));
+
+	world->SetContactListener((b2ContactListener *)&listener);
 
 	int32 velocityIterations = 6;
 	int32 positionIterations = 2;
@@ -74,19 +65,19 @@ int main(void)
 
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
-		world->Step(1/float(fps), velocityIterations, positionIterations);
+		world->Step(1 / float(fps), velocityIterations, positionIterations);
 
 		for (auto key : listener.GetDeletables()) // Remove all elements that where selected
 		{
 			gm->deleteGE(key);
 		}
-		
 
 		for (auto wall : walls)
 		{
 			wall->update();
 			wall->draw();
 		}
+
 		for (auto pair : gm->geMap)
 		{
 			pair.second->update();
@@ -106,14 +97,14 @@ int main(void)
 				snprintf(str, 100, "%4.2f %4.2f", mouse.x, mouse.y);
 				DrawText(str, 20, 20, 20, BLACK);
 				auto element = dynamic_pointer_cast<GE>(shared_ptr<Box>(new Box(
-												int(mouse.x - 10 - int(growth / 2)),
-												int(mouse.y - 10 - int(growth / 2)),
-												20 + int(growth),
-												20 + int(growth),
-												world)));
+					int(mouse.x - 10 - int(growth / 2)),
+					int(mouse.y - 10 - int(growth / 2)),
+					20 + int(growth),
+					20 + int(growth),
+					world)));
 				// element->init(world);
-				gm->insertGE(element );
-			
+				gm->insertGE(element);
+
 				growth += 0.0;
 				// if (boxes.size() > 1000)
 				// {

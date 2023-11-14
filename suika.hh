@@ -15,12 +15,14 @@ public:
     ~Suika();
     void init(shared_ptr<b2World> world) override;
     void draw() override;
+    void changeType(Fruits::GE_Type type);
 };
 
 enum Melon{
     Small,
     Middle,
-    Large
+    Large,
+    Giant
 };
 
 class SuikaFactory {

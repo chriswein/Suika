@@ -16,7 +16,7 @@ void contactlistener::BeginContact(b2Contact *contact)
     if (one == nullptr || two == nullptr)
         return;
 
-    if (one->type == two->type && one->type == SUIKA)
+    if (one->type == two->type && one->type == Fruits::SUIKA)
     {
         this->deletables[one->id] = 0;
         this->deletables[two->id] = 0;

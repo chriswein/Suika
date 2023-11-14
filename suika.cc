@@ -1,4 +1,5 @@
 #include "suika.hh"
+#undef ORANGE // Defined in raylib
 
 Suika::Suika(int x, int y, int radius, shared_ptr<b2World> world) : Box(x, y, radius / 2, radius / 2)
 {
@@ -8,9 +9,7 @@ Suika::Suika(int x, int y, int radius, shared_ptr<b2World> world) : Box(x, y, ra
 	this->init(world);
 }
 
-Suika::~Suika()
-{
-}
+Suika::~Suika() {}
 
 void Suika::init(shared_ptr<b2World> world)
 {
@@ -51,13 +50,33 @@ void Suika::draw()
 #endif
 }
 
-void Suika::changeType(Fruits::GE_Type type){
+typedef struct parameters
+{
+	int radius;
+	Color color;
+} parameters;
+
+unordered_map<Fruits::GE_Type, parameters> values =
+	{{Fruits::TANGERINE, {10, PURPLE}},
+	 {Fruits::ORANGE, {50, YELLOW}},
+	 {Fruits::GRAPEFRUIT, {150, BLUE}},
+	 {Fruits::SUIKA, {225, GREEN}}};
+
+void Suika::changeType(Fruits::GE_Type type)
+{
+	using namespace Fruits;
+
+	auto apply = [](parameters p) {};
+
 	this->gid->type = type;
+	if (values.find(type) == values.end())
+		return;
+	this->radius = values[type].radius;
+	this->color = values[type].color;
 }
 
 shared_ptr<Suika> SuikaFactory::create(Melon melon, int x, int y, shared_ptr<b2World> world)
 {
-	#undef ORANGE // Defined in raylib
 	using namespace Fruits;
 	int radius = 10;
 	Color color = PURPLE;
@@ -66,32 +85,22 @@ shared_ptr<Suika> SuikaFactory::create(Melon melon, int x, int y, shared_ptr<b2W
 	switch (melon)
 	{
 	case Small:
-		radius = 10;
-		color = PURPLE;
 		type = TANGERINE;
 		break;
 	case Middle:
-		radius = 50;
-		color = YELLOW;
 		type = ORANGE;
 		break;
 	case Large:
-		radius = 150;
-		color = GREEN;
 		type = GRAPEFRUIT;
 		break;
 	case Giant:
-		radius = 225;
-		color = GREEN;
 		type = SUIKA;
 		break;
 	default:
-		radius = 10;
-		color = PURPLE;
 		type = TANGERINE;
 		break;
 	}
-	shared_ptr<Suika> a = shared_ptr<Suika>(new Suika(x, y, radius, world));
+	shared_ptr<Suika> a = shared_ptr<Suika>(new Suika(x, y, values[type].radius, world));
 	a->color = color;
 	a->changeType(type);
 	return a;

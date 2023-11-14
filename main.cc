@@ -102,14 +102,9 @@ int main(void)
 					20 + int(growth),
 					20 + int(growth),
 					world)));
-				// element->init(world);
 				gm->insertGE(element);
 
 				growth += 0.0;
-				// if (boxes.size() > 1000)
-				// {
-				// 	boxes.pop_back();
-				// }
 			}
 			else
 			{

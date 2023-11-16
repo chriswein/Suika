@@ -27,8 +27,8 @@ private:
     /* data */
     shared_ptr<GEManager> gm;
     unordered_map<int, int> deletables;
-    vector<FruitsPairToMerge> mergables;
-
+    unordered_map<int, FruitsPairToMerge>mergables;
+    
 public:
     contactlistener(shared_ptr<GEManager> gm);
     ~contactlistener();

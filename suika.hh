@@ -2,13 +2,14 @@
 #include "box.hh"
 #include "box2d.h"
 #include "raylib.h"
+#include "helpers.hh"
 #include <random>
 
 class Suika : public Box
 {
 private:
     /* data */
-    
+    b2MassData massdata;
     
 public:
     float radius;
@@ -33,4 +34,5 @@ Melon getNextMelon();
 class SuikaFactory {
     public: 
         static shared_ptr<Suika> create(Melon melon, int x , int y, shared_ptr<b2World> world);
+        static shared_ptr<Suika> createS(Fruits::GE_Type type, int x, int y, shared_ptr<b2World> world);
 };

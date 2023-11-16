@@ -25,30 +25,44 @@ void Game::update(shared_ptr<contactlistener> contacts, shared_ptr<GEManager> gm
         p.y = top + diffh / 2;
         return p;
     };
-    for (auto ele : mergables)
+    auto calcNewType = [](Fruits::GE_Type type){
+        int i = type;
+        if(++i > GE_Type_Max) i = GE_Type_Max;
+        return (Fruits::GE_Type)i;
+    };
+    
+    for (auto key : contacts->GetDeletables()) // Remove all elements that where selected
+	{
+			gm->deleteGE(key);
+	}
+
+    for (auto ele : mergables) // Add a new element for the pair that was deleted
     {
         auto lower = compareFruitsByHeightAndReturnLower(ele.A, ele.B);
         auto newpos = calcMiddlePosition(ele.A, ele.B);
-        auto new_type = (Melon)(((int(ele.A.type) + 1) % MELONLENGTH));
+        auto new_type = calcNewType(ele.A.type);
         gm->insertGE(
             dpc<GE>(
-                SuikaFactory::create(
+                SuikaFactory::createS(
                     new_type, newpos.x, newpos.y, world
                 )
             )
         );
     }
+
+   
+
 }
 void Game::init(shared_ptr<b2World> world, shared_ptr<GEManager> gm)
 {
-    gm->insertGE(dpc<GE>(shared_ptr<Box>((new Box(300, 100, 20, 20, world)))));
-    gm->insertGE(dpc<GE>(shared_ptr<Box>((new Box(100, 100, 20, 20, world)))));
-    gm->insertGE(dpc<GE>(shared_ptr<Box>((new Box(300, 300, 20, 20, world)))));
-    gm->insertGE(dpc<GE>(shared_ptr<Box>((new Box(250, 100, 40, 40, world)))));
+    // gm->insertGE(dpc<GE>(shared_ptr<Box>((new Box(300, 100, 20, 20, world)))));
+    // gm->insertGE(dpc<GE>(shared_ptr<Box>((new Box(100, 100, 20, 20, world)))));
+    // gm->insertGE(dpc<GE>(shared_ptr<Box>((new Box(300, 300, 20, 20, world)))));
+    // gm->insertGE(dpc<GE>(shared_ptr<Box>((new Box(250, 100, 40, 40, world)))));
     gm->insertGE(dpc<GE>(
-        SuikaFactory::create(Small, 200, 10, world)));
+        SuikaFactory::create(Large, 200, 10, world)));
     gm->insertGE(dpc<GE>(
-        SuikaFactory::create(Large, 200, 60, world)));
+        SuikaFactory::create(Large, 600, 60, world)));
 }
 
 Game::Game(/* args */)

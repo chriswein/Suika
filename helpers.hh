@@ -36,9 +36,9 @@ namespace Fruits
 		GRAPEFRUIT,
 		MELON,
 		SUIKA
-	};
+	}; 
 }
-
+static int GE_Type_Max = Fruits::GE_Type::SUIKA;
 typedef struct GE_Id
 {
 	int id;

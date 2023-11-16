@@ -54,13 +54,16 @@ typedef struct parameters
 {
 	int radius;
 	Color color;
+	float weight;
 } parameters;
 
+const float baseweight = 200.0;
 unordered_map<Fruits::GE_Type, parameters> values =
-	{{Fruits::TANGERINE, {10, PURPLE}},
-	 {Fruits::ORANGE, {50, YELLOW}},
-	 {Fruits::GRAPEFRUIT, {150, BLUE}},
-	 {Fruits::SUIKA, {225, GREEN}}};
+	{{Fruits::TANGERINE, {10, PURPLE, 1.0f*baseweight}},
+	 {Fruits::ORANGE, {20, YELLOW, 1.5f*baseweight}},
+	 {Fruits::GRAPEFRUIT, {40, BLUE, 2.0f*baseweight}},
+	 {Fruits::MELON, {80, BLACK, 2.5f*baseweight}},
+	 {Fruits::SUIKA, {160, GREEN, 3.0f*baseweight}}};
 
 void Suika::changeType(Fruits::GE_Type type)
 {
@@ -73,12 +76,17 @@ void Suika::changeType(Fruits::GE_Type type)
 		return;
 	this->radius = values[type].radius;
 	this->color = values[type].color;
+	this->massdata = 
+	{
+		values[type].weight, this->bodyref->GetLocalCenter(), this->bodyref->GetInertia()
+	};
+	const b2MassData *p = &massdata;
+	this->bodyref->SetMassData(p);
 }
 
 shared_ptr<Suika> SuikaFactory::create(Melon melon, int x, int y, shared_ptr<b2World> world)
 {
 	using namespace Fruits;
-	int radius = 10;
 	Color color = PURPLE;
 	GE_Type type = TANGERINE;
 
@@ -106,10 +114,19 @@ shared_ptr<Suika> SuikaFactory::create(Melon melon, int x, int y, shared_ptr<b2W
 	return a;
 }
 
-Melon getNextMelon(){
+shared_ptr<Suika> SuikaFactory::createS(Fruits::GE_Type type, int x, int y, shared_ptr<b2World> world)
+{
+	using namespace Fruits;
+	shared_ptr<Suika> a = shared_ptr<Suika>(new Suika(x, y, values[type].radius, world));
+	a->changeType(type);
+	return a;
+}
+
+Melon getNextMelon()
+{
 	using namespace std;
-	random_device rd; // obtain a random number from hardware
-    mt19937 gen(rd()); // seed the generator
-    uniform_int_distribution<> distr(0, MELONLENGTH); // define the range
+	random_device rd;								  // obtain a random number from hardware
+	mt19937 gen(rd());								  // seed the generator
+	uniform_int_distribution<> distr(0, MELONLENGTH); // define the range
 	return (Melon)distr(gen);
 }

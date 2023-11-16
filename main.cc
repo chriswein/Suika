@@ -91,7 +91,7 @@ int main(void)
 			{
 				delta = 0.0;
 				// auto melon = SuikaFactory::create(getNextMelon(), mouse.x, 20, world);
-				auto melon = SuikaFactory::createS(Fruits::ORANGE, mouse.x, 20, world);
+				auto melon = SuikaFactory::create(Fruits::TANGERINE, mouse.x, 20, world);
 				gm->insertGE(melon);
 			}
 			else
@@ -99,7 +99,7 @@ int main(void)
 				delta += GetFrameTime();
 			}
 		}
-		drawGuideLines();
+		// drawGuideLines();
 		EndDrawing();
 	}
 

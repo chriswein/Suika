@@ -43,7 +43,7 @@ void Game::update(shared_ptr<contactlistener> contacts, shared_ptr<GEManager> gm
         auto new_type = calcNewType(ele.A.type);
         gm->insertGE(
             dpc<GE>(
-                SuikaFactory::createS(
+                SuikaFactory::create(
                     new_type, newpos.x, newpos.y, world
                 )
             )

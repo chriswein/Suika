@@ -34,5 +34,5 @@ Melon getNextMelon();
 class SuikaFactory {
     public: 
         static shared_ptr<Suika> create(Melon melon, int x , int y, shared_ptr<b2World> world);
-        static shared_ptr<Suika> createS(Fruits::GE_Type type, int x, int y, shared_ptr<b2World> world);
+        static shared_ptr<Suika> create(Fruits::GE_Type type, int x, int y, shared_ptr<b2World> world);
 };

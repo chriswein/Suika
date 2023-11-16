@@ -58,12 +58,13 @@ typedef struct parameters
 } parameters;
 
 const float baseweight = 200.0;
+const int baseradius = 10;
 unordered_map<Fruits::GE_Type, parameters> values =
-	{{Fruits::TANGERINE, {10, PURPLE, 1.0f*baseweight}},
-	 {Fruits::ORANGE, {20, YELLOW, 1.5f*baseweight}},
-	 {Fruits::GRAPEFRUIT, {40, BLUE, 2.0f*baseweight}},
-	 {Fruits::MELON, {80, BLACK, 2.5f*baseweight}},
-	 {Fruits::SUIKA, {160, GREEN, 3.0f*baseweight}}};
+	{{Fruits::TANGERINE, {2*baseradius, PURPLE, 1.0f*baseweight}},
+	 {Fruits::ORANGE, {4*baseradius, YELLOW, 1.5f*baseweight}},
+	 {Fruits::GRAPEFRUIT, {8*baseradius, BLUE, 2.0f*baseweight}},
+	 {Fruits::MELON, {12*baseradius, BLACK, 2.5f*baseweight}},
+	 {Fruits::SUIKA, {16*baseradius, GREEN, 3.0f*baseweight}}};
 
 void Suika::changeType(Fruits::GE_Type type)
 {
@@ -114,7 +115,7 @@ shared_ptr<Suika> SuikaFactory::create(Melon melon, int x, int y, shared_ptr<b2W
 	return a;
 }
 
-shared_ptr<Suika> SuikaFactory::createS(Fruits::GE_Type type, int x, int y, shared_ptr<b2World> world)
+shared_ptr<Suika> SuikaFactory::create(Fruits::GE_Type type, int x, int y, shared_ptr<b2World> world)
 {
 	using namespace Fruits;
 	shared_ptr<Suika> a = shared_ptr<Suika>(new Suika(x, y, values[type].radius, world));

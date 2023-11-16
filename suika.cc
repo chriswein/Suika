@@ -105,3 +105,11 @@ shared_ptr<Suika> SuikaFactory::create(Melon melon, int x, int y, shared_ptr<b2W
 	a->changeType(type);
 	return a;
 }
+
+Melon getNextMelon(){
+	using namespace std;
+	random_device rd; // obtain a random number from hardware
+    mt19937 gen(rd()); // seed the generator
+    uniform_int_distribution<> distr(0, MELONLENGTH); // define the range
+	return (Melon)distr(gen);
+}

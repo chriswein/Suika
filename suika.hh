@@ -1,6 +1,8 @@
+#pragma once
 #include "box.hh"
 #include "box2d.h"
 #include "raylib.h"
+#include <random>
 
 class Suika : public Box
 {
@@ -23,9 +25,12 @@ enum Melon{
     Middle,
     Large,
     Giant
-};
+}; 
+static int MELONLENGTH = Melon::Giant;
+
+Melon getNextMelon();
 
 class SuikaFactory {
     public: 
-        shared_ptr<Suika> create(Melon melon, int x , int y, shared_ptr<b2World> world);
+        static shared_ptr<Suika> create(Melon melon, int x , int y, shared_ptr<b2World> world);
 };

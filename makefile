@@ -2,7 +2,7 @@
 CC = clang++
 
 # Compiler flags
-CFLAGS = -I./include -Wall -std=c++11 -O3
+CFLAGS = -I./include -Wall -std=c++14 -O3
 
 # Frameworks
 FRAMEWORKS = -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL

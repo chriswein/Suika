@@ -3,6 +3,7 @@
 #include "box2d.h"
 #include "raylib.h"
 #include "helpers.hh"
+#include <queue>
 #include <random>
 
 class Suika : public Box
@@ -29,7 +30,7 @@ enum Melon{
 }; 
 static int MELONLENGTH = Melon::Giant;
 
-Melon getNextMelon();
+Fruits::GE_Type getNextMelon();
 
 class SuikaFactory {
     public: 

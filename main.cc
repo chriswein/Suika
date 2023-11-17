@@ -23,9 +23,16 @@ void drawGuideLines()
 	}
 }
 
+void drawPoints(int points)
+{
+	char str[100];
+	snprintf(str, 100, "Points:\t%i", points);
+	DrawText(str, 20, 20, 48, BLACK);
+}
+
 int main(void)
 {
-	InitWindow(window_width, window_height, "Suika Game");
+	InitWindow(game_area_x, game_area_y, "Suika Game");
 
 	Game game;
 	b2Vec2 gravity(0.0f, -40.0f);
@@ -45,16 +52,34 @@ int main(void)
 	auto listener = make_shared<contactlistener>(contactlistener(p));
 
 	vector<shared_ptr<Box>> walls;
-	walls.push_back(shared_ptr<Box>(new Box(20, 40, 20, 720, true, world)));
-	walls.push_back(shared_ptr<Box>(new Box(window_width - 40, 40, 20, 720, true, world)));
+	walls.push_back(shared_ptr<Box>(new Box(20+offset_x-100, 40+offset_y, 20, 720, true, world)));
+	walls.push_back(shared_ptr<Box>(new Box(window_width+offset_x/2-100, 40+offset_y, 20, 720, true, world)));
 
 	game.init(world, gm);
 	world->SetContactListener((b2ContactListener *)listener.get());
 
 	int32 velocityIterations = 6;
 	int32 positionIterations = 2;
-	int fps = 120;
+	int fps = 60;
 	SetTargetFPS(fps);
+	int points = 0;
+
+	unordered_map<Fruits::GE_Type, int> pointstable = {
+		{Fruits::BOX, 0},
+		{Fruits::TANGERINE, 1},
+		{Fruits::ORANGE, 2},
+		{Fruits::GRAPEFRUIT, 4},
+		{Fruits::MELON, 8},
+		{Fruits::SUIKA, 32},
+	};
+	auto calcPoints = [&pointstable](Fruits::GE_Type type)
+	{
+		if (pointstable.find(type) != pointstable.end())
+		{
+			return pointstable[type];
+		}
+		return 0;
+	};
 
 	while (!WindowShouldClose())
 	{
@@ -62,8 +87,6 @@ int main(void)
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 		world->Step(1 / float(fps), velocityIterations, positionIterations);
-
-		
 
 		for (auto wall : walls)
 		{
@@ -75,11 +98,10 @@ int main(void)
 		{
 			pair.second->update();
 			pair.second->draw();
+			points += calcPoints(pair.second->id()->type);
 		}
 
-	
-			game.update(listener, gm, world);
-	
+		game.update(listener, gm, world);
 
 		Vector2 mouse = GetMousePosition();
 		static float growth = 0;
@@ -90,8 +112,8 @@ int main(void)
 			if (delta > 1.0 || !limit)
 			{
 				delta = 0.0;
-				// auto melon = SuikaFactory::create(getNextMelon(), mouse.x, 20, world);
-				auto melon = SuikaFactory::create(Fruits::TANGERINE, mouse.x, 20, world);
+				 auto melon = SuikaFactory::create(getNextMelon(), mouse.x-offset_x, 20, world);
+				// auto melon = SuikaFactory::create(Fruits::TANGERINE, mouse.x, 20, world);
 				gm->insertGE(melon);
 			}
 			else
@@ -100,6 +122,8 @@ int main(void)
 			}
 		}
 		// drawGuideLines();
+		drawPoints(points);
+		points = 0;
 		EndDrawing();
 	}
 

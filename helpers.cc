@@ -29,14 +29,14 @@ int pixelXFromBox2d(float x)
 	{
 		float q = (b2_world_width / 2) - abs(x);
 		float a = (abs(q) / (b2_world_width / 2)) * (window_width / 2);
-		return a;
+		return a+offset_x;
 	}
 	else
 	{
 		float q = x;
 		float a = (abs(q) / (b2_world_width / 2)) * (window_width / 2);
 		a = (window_width / 2) + a;
-		return a;
+		return a+offset_x;
 	}
 }
 int pixelYFromBox2d(float y)
@@ -45,14 +45,14 @@ int pixelYFromBox2d(float y)
 	{
 		float q = (b2_world_height / 2) - abs(y);
 		float a = (abs(q) / (b2_world_height / 2)) * (window_height / 2);
-		return a;
+		return a+offset_y;
 	}
 	else
 	{
 		float q = y;
 		float a = (abs(q) / (b2_world_height / 2)) * (window_height / 2);
 		a = (window_height / 2) + a;
-		return a;
+		return a+offset_y;
 	}
 }
 

@@ -44,7 +44,7 @@ void Game::update(shared_ptr<contactlistener> contacts, shared_ptr<GEManager> gm
         gm->insertGE(
             dpc<GE>(
                 SuikaFactory::create(
-                    new_type, newpos.x, newpos.y, world
+                    new_type, newpos.x-offset_x, newpos.y-offset_y, world
                 )
             )
         );
@@ -60,9 +60,9 @@ void Game::init(shared_ptr<b2World> world, shared_ptr<GEManager> gm)
     // gm->insertGE(dpc<GE>(shared_ptr<Box>((new Box(300, 300, 20, 20, world)))));
     // gm->insertGE(dpc<GE>(shared_ptr<Box>((new Box(250, 100, 40, 40, world)))));
     gm->insertGE(dpc<GE>(
-        SuikaFactory::create(Large, 200, 10, world)));
+        SuikaFactory::create(Large, 200+offset_x, 10+offset_y, world)));
     gm->insertGE(dpc<GE>(
-        SuikaFactory::create(Large, 600, 60, world)));
+        SuikaFactory::create(Large, 600+offset_x, 60+offset_y, world)));
 }
 
 Game::Game(/* args */)

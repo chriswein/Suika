@@ -40,7 +40,6 @@ Box::~Box()
 {
 	if (world != nullptr && this->bodyref != nullptr)
 	{
-		printf("\ndeleted body\n %i", this->gid->id);
 		world->DestroyBody(this->bodyref);
 	}
 }

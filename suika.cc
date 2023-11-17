@@ -45,7 +45,6 @@ void Suika::draw()
 	DrawCircle(this->x, this->y, this->radius, this->color);
 #ifdef DEBUG
 	char str[100];
-	snprintf(str, 100, "%i %i \n id: %i type: %i", this->x, this->y, this->gid->id, this->gid->type);
 	DrawText(str, 50, 40, 20, BLACK);
 #endif
 }
@@ -123,11 +122,22 @@ shared_ptr<Suika> SuikaFactory::create(Fruits::GE_Type type, int x, int y, share
 	return a;
 }
 
-Melon getNextMelon()
+Fruits::GE_Type getNextMelon()
 {
-	using namespace std;
-	random_device rd;								  // obtain a random number from hardware
-	mt19937 gen(rd());								  // seed the generator
-	uniform_int_distribution<> distr(0, MELONLENGTH); // define the range
-	return (Melon)distr(gen);
+	static queue<Fruits::GE_Type> queue;
+	random_device rd;						
+	mt19937 gen(rd());								 
+	uniform_int_distribution<> distr(1, 1+(GE_Type_Max/2)); 
+
+	if(queue.empty()){
+		for (size_t i = 0; i < 5; i++)
+		{
+			queue.push((Fruits::GE_Type)distr(rd));
+		}
+	}else{
+		queue.push((Fruits::GE_Type)distr(rd));
+	}
+	auto res = queue.front();
+	queue.pop();
+	return res;
 }

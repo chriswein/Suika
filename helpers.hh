@@ -2,11 +2,14 @@
 #include "box2d.h"
 #include <memory>
 #include <map>
-#define DEBUG true
 using namespace std;
 
 const int window_width = 800;
 const int window_height = 800;
+const int game_area_x = 1280;
+const int game_area_y = 820;
+const int offset_x = (game_area_x - window_width) / 2;
+const int offset_y = (game_area_y - window_height) / 2;
 const float aspect = float(window_width) / float(window_height);
 const float b2_world_width = 20.0;
 const float b2_world_height = 20.0;
@@ -36,7 +39,7 @@ namespace Fruits
 		GRAPEFRUIT,
 		MELON,
 		SUIKA
-	}; 
+	};
 }
 static int GE_Type_Max = Fruits::GE_Type::SUIKA;
 typedef struct GE_Id

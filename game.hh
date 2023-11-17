@@ -9,6 +9,7 @@ class Game
 {
 private:
     static int points;
+    
 public:
     Game(/* args */);
     ~Game();

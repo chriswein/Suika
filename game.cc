@@ -1,6 +1,7 @@
 #include "game.hh"
 #define dpc dynamic_pointer_cast
 
+
 void Game::update(shared_ptr<contactlistener> contacts, shared_ptr<GEManager> gm, shared_ptr<b2World> world)
 {
     vector<FruitsPairToMerge> mergables = contacts->GetMergables();
@@ -37,18 +38,19 @@ void Game::update(shared_ptr<contactlistener> contacts, shared_ptr<GEManager> gm
     {
         auto new_position = calcMiddlePosition(ele.A, ele.B);
         auto new_type = calcNewType(ele.A.type);
-        auto l = (new_position.x); 
+        auto l = (new_position.x);
         // TODO this does not fix the problem
         auto t = (new_position.y);
-        if (l<0){ // TODO only for debugging
+        if (l < 0)
+        { // TODO only for debugging
             ;
         }
-        auto s =SuikaFactory::create(
-                    new_type, l, t, world);
+        auto s = SuikaFactory::create(
+            new_type, l, t, world);
         s->update();
         gm->insertGE(
-            dpc<GE>(s
-                ));
+            dpc<GE>(s));
+        PlaySound(this->sound);
         printf("Inserted new Suika %i at %ix %iy \n", new_type, l, t);
     }
 }
@@ -66,6 +68,8 @@ void Game::init(shared_ptr<b2World> world, shared_ptr<GEManager> gm)
 
 Game::Game(/* args */)
 {
+    Wave c = LoadWave("click.wav");
+    this->sound = LoadSoundFromWave(c);
 }
 
 Game::~Game()

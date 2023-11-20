@@ -9,7 +9,7 @@ class Game
 {
 private:
     static int points;
-    
+   Sound sound; 
 public:
     Game(/* args */);
     ~Game();

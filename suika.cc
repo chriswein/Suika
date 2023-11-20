@@ -9,6 +9,9 @@ typedef struct parameters
 
 constexpr float baseweight = 200.0;
 constexpr int baseradius = 10;
+
+
+
 unordered_map<Fruits::GE_Type, parameters> values =
     {
         {Fruits::GRAPE, {1 * baseradius, PINK, 1.0f * baseweight}},

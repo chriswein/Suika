@@ -46,6 +46,7 @@ void DrawPoints(int points)
 int main(void)
 {
 	InitWindow(window_width, window_height, "Suika Game");
+	  InitAudioDevice();
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
 	Game game;
 	b2Vec2 gravity(0.0f, -40.0f);
@@ -129,7 +130,7 @@ int main(void)
 		points = 0;
 		EndDrawing();
 	}
-
+ CloseAudioDevice();     // Close audio device
 	CloseWindow();
 
 	world->SetContactListener((b2ContactListener *)nullptr); //

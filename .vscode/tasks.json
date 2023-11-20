@@ -1,0 +1,38 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: clang Aktive Datei kompilieren",
+            "command": "/usr/bin/clang++",
+            "args": [
+                "-fcolor-diagnostics",
+                "-fansi-escape-codes",
+                "-framework"," CoreVideo"," -framework"," IOKit"," -framework"," Cocoa"," -framework"," GLUT"," -framework"," OpenGL",
+                "-I","./include",
+                "./libs/libraylib.a","./libs/libbox2d.a",
+                "-g",
+                "${file}",
+                "./box.cc",
+                "./helpers.cc",
+                "./suika.cc",
+                "./game.cc",
+                "./contactlistener.cc",
+                "./gui.cc",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Vom Debugger generierte Aufgabe."
+        }
+    ],
+    "version": "2.0.0"
+}

@@ -2,7 +2,6 @@
 /libs/*
 .DS_Store
 main
-.vscode/tasks.json
 main.dSYM/Contents/Info.plist
 main.dSYM/Contents/Resources/DWARF/main
 .DS_Store

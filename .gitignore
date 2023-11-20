@@ -8,4 +8,4 @@ main.dSYM/Contents/Resources/DWARF/main
 .DS_Store
 .vscode/settings.json
 ./suika
-box.cc
+suika

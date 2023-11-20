@@ -1,5 +1,24 @@
 #include "suika.hh"
 #undef ORANGE // Defined in raylib
+typedef struct parameters
+{
+    int radius;
+    Color color;
+    float weight;
+} parameters;
+
+constexpr float baseweight = 200.0;
+constexpr int baseradius = 10;
+unordered_map<Fruits::GE_Type, parameters> values =
+    {
+        {Fruits::GRAPE, {1 * baseradius, PINK, 1.0f * baseweight}},
+        {Fruits::CHERRY, {2 * baseradius, GRAY, 1.1f * baseweight}},
+        {Fruits::STRAWBERRY, {3 * baseradius, LIGHTGRAY, 1.2f * baseweight}},
+        {Fruits::TANGERINE, {4 * baseradius, PURPLE, 2.3f * baseweight}},
+        {Fruits::ORANGE, {6 * baseradius, YELLOW, 2.5f * baseweight}},
+        {Fruits::GRAPEFRUIT, {8 * baseradius, BLUE, 3.0f * baseweight}},
+        {Fruits::MELON, {12 * baseradius, BLACK, 4.5f * baseweight}},
+        {Fruits::SUIKA, {16 * baseradius, GREEN, 5.0f * baseweight}}};
 
 Suika::Suika(int x, int y, int radius, shared_ptr<b2World> world) : Box(x, y, radius / 2, radius / 2)
 {
@@ -49,21 +68,6 @@ void Suika::draw()
 #endif
 }
 
-typedef struct parameters
-{
-	int radius;
-	Color color;
-	float weight;
-} parameters;
-
-const float baseweight = 200.0;
-const int baseradius = 10;
-unordered_map<Fruits::GE_Type, parameters> values =
-	{{Fruits::TANGERINE, {2*baseradius, PURPLE, 1.0f*baseweight}},
-	 {Fruits::ORANGE, {4*baseradius, YELLOW, 1.5f*baseweight}},
-	 {Fruits::GRAPEFRUIT, {8*baseradius, BLUE, 2.0f*baseweight}},
-	 {Fruits::MELON, {12*baseradius, BLACK, 2.5f*baseweight}},
-	 {Fruits::SUIKA, {16*baseradius, GREEN, 3.0f*baseweight}}};
 
 void Suika::changeType(Fruits::GE_Type type)
 {
@@ -76,10 +80,9 @@ void Suika::changeType(Fruits::GE_Type type)
 		return;
 	this->radius = values[type].radius;
 	this->color = values[type].color;
-	this->massdata = 
-	{
-		values[type].weight, this->bodyref->GetLocalCenter(), this->bodyref->GetInertia()
-	};
+	this->massdata =
+		{
+			values[type].weight, this->bodyref->GetLocalCenter(), this->bodyref->GetInertia()};
 	const b2MassData *p = &massdata;
 	this->bodyref->SetMassData(p);
 }
@@ -114,30 +117,41 @@ shared_ptr<Suika> SuikaFactory::create(Melon melon, int x, int y, shared_ptr<b2W
 	return a;
 }
 
+
 shared_ptr<Suika> SuikaFactory::create(Fruits::GE_Type type, int x, int y, shared_ptr<b2World> world)
 {
-	using namespace Fruits;
-	shared_ptr<Suika> a = shared_ptr<Suika>(new Suika(x, y, values[type].radius, world));
+	int x_ = x<0?values[type].radius:x;
+	shared_ptr<Suika> a = shared_ptr<Suika>(new Suika(x_, y, values[type].radius, world));
 	a->changeType(type);
 	return a;
 }
 
-Fruits::GE_Type getNextMelon()
-{
-	static queue<Fruits::GE_Type> queue;
-	random_device rd;						
-	mt19937 gen(rd());								 
-	uniform_int_distribution<> distr(1, 1+(GE_Type_Max/2)); 
 
-	if(queue.empty()){
+Fruits::GE_Type getNextMelon()
+{	
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_int_distribution<> distr(1, 1 + (GE_Type_Max / 2));
+
+	if (next_melons.empty())
+	{
 		for (size_t i = 0; i < 5; i++)
 		{
-			queue.push((Fruits::GE_Type)distr(rd));
+			next_melons.push((Fruits::GE_Type)distr(rd));
 		}
-	}else{
-		queue.push((Fruits::GE_Type)distr(rd));
 	}
-	auto res = queue.front();
-	queue.pop();
+	else
+	{
+		next_melons.push((Fruits::GE_Type)distr(rd));
+	}
+	auto res = next_melons.front();
+	next_melons.pop();
 	return res;
+}
+
+Fruits::GE_Type previewNext(){
+	if (next_melons.empty()){
+		getNextMelon();
+	}
+	return next_melons.front();
 }

@@ -69,7 +69,7 @@ void Box::init(shared_ptr<b2World> world)
     std::uniform_int_distribution<int> distribution(1, 100);
 
 	b2PolygonShape dynamicBox;
-	dynamicBox.SetAsBox(w / 2, h / 2);
+	dynamicBox.SetAsBox(w / 2.0, h / 2.0);
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &dynamicBox;
 	if (!this->stat)

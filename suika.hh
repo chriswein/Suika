@@ -6,12 +6,14 @@
 #include <queue>
 #include <random>
 
+#undef ORANGE
+
 class Suika : public Box
 {
 private:
     /* data */
     b2MassData massdata;
-    
+
 public:
     float radius;
     Color color = RED;
@@ -22,18 +24,23 @@ public:
     void changeType(Fruits::GE_Type type);
 };
 
-enum Melon{
+enum Melon
+{
     Small,
     Middle,
     Large,
     Giant
-}; 
+};
 static int MELONLENGTH = Melon::Giant;
 
-Fruits::GE_Type getNextMelon();
 
-class SuikaFactory {
-    public: 
-        static shared_ptr<Suika> create(Melon melon, int x , int y, shared_ptr<b2World> world);
-        static shared_ptr<Suika> create(Fruits::GE_Type type, int x, int y, shared_ptr<b2World> world);
+static std::queue<Fruits::GE_Type> next_melons;
+Fruits::GE_Type getNextMelon();
+Fruits::GE_Type previewNext();
+
+class SuikaFactory
+{
+public:
+    static shared_ptr<Suika> create(Melon melon, int x, int y, shared_ptr<b2World> world);
+    static shared_ptr<Suika> create(Fruits::GE_Type type, int x, int y, shared_ptr<b2World> world);
 };

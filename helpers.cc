@@ -28,14 +28,14 @@ int pixelXFromBox2d(float x)
 	if (x < 0)
 	{
 		float q = (b2_world_width / 2) - abs(x);
-		float a = (abs(q) / (b2_world_width / 2)) * (window_width / 2);
+		float a = (abs(q) / (b2_world_width / 2)) * (game_area_x / 2);
 		return a+offset_x;
 	}
 	else
 	{
 		float q = x;
-		float a = (abs(q) / (b2_world_width / 2)) * (window_width / 2);
-		a = (window_width / 2) + a;
+		float a = (abs(q) / (b2_world_width / 2)) * (game_area_x / 2);
+		a = (game_area_x / 2) + a;
 		return a+offset_x;
 	}
 }
@@ -44,14 +44,14 @@ int pixelYFromBox2d(float y)
 	if (y > 0)
 	{
 		float q = (b2_world_height / 2) - abs(y);
-		float a = (abs(q) / (b2_world_height / 2)) * (window_height / 2);
+		float a = (abs(q) / (b2_world_height / 2)) * (game_area_y / 2);
 		return a+offset_y;
 	}
 	else
 	{
 		float q = y;
-		float a = (abs(q) / (b2_world_height / 2)) * (window_height / 2);
-		a = (window_height / 2) + a;
+		float a = (abs(q) / (b2_world_height / 2)) * (game_area_y / 2);
+		a = (game_area_y / 2) + a;
 		return a+offset_y;
 	}
 }

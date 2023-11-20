@@ -4,17 +4,17 @@
 #include <map>
 using namespace std;
 
-const int window_width = 800;
-const int window_height = 800;
-const int game_area_x = 1280;
-const int game_area_y = 820;
-const int offset_x = (game_area_x - window_width) / 2;
-const int offset_y = (game_area_y - window_height) / 2;
-const float aspect = float(window_width) / float(window_height);
+const int game_area_x = 800;
+const int game_area_y = 800;
+const int window_width = 1200;
+const int window_height = 820;
+const int offset_x = (window_width - game_area_x) / 2;
+const int offset_y = (window_height - game_area_y) / 2;
+const float aspect = float(game_area_x) / float(game_area_y);
 const float b2_world_width = 20.0;
 const float b2_world_height = 20.0;
-const float b2_w_conv = b2_world_width / window_width;
-const float b2_h_conv = b2_world_height / window_height;
+const float b2_w_conv = b2_world_width / game_area_x;
+const float b2_h_conv = b2_world_height / game_area_y;
 static int GE_last_id = 0;
 
 float widthInBox2d(int w);
@@ -34,6 +34,9 @@ namespace Fruits
 	enum GE_Type
 	{
 		BOX,
+		GRAPE,
+		CHERRY,
+		STRAWBERRY,
 		TANGERINE,
 		ORANGE,
 		GRAPEFRUIT,
@@ -41,7 +44,8 @@ namespace Fruits
 		SUIKA
 	};
 }
-static int GE_Type_Max = Fruits::GE_Type::SUIKA;
+const int GE_Type_Max = Fruits::GE_Type::SUIKA;
+
 typedef struct GE_Id
 {
 	int id;

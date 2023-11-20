@@ -8,10 +8,23 @@
 #include "suika.hh"
 #include "contactlistener.hh"
 #include "game.hh"
+#include "gui.hh"
 
 using namespace std;
 
-void drawGuideLines()
+unordered_map<Fruits::GE_Type, int> pointstable = {
+	{Fruits::BOX, 0},
+	{Fruits::GRAPE, 1},
+	{Fruits::CHERRY, 2},
+	{Fruits::STRAWBERRY, 6},
+	{Fruits::TANGERINE, 12},
+	{Fruits::ORANGE, 24},
+	{Fruits::GRAPEFRUIT, 48},
+	{Fruits::MELON, 96},
+	{Fruits::SUIKA, 128},
+};
+
+void DrawGuideLines()
 {
 	for (int i = 0; i < window_width; i = i + 20)
 	{
@@ -23,63 +36,45 @@ void drawGuideLines()
 	}
 }
 
-void drawPoints(int points)
+void DrawPoints(int points)
 {
-	char str[100];
-	snprintf(str, 100, "Points:\t%i", points);
-	DrawText(str, 20, 20, 48, BLACK);
+	char string[100];
+	snprintf(string, 100, "Points:\t%i", points);
+	DrawText(string, 20, 20, 48, BLACK);
 }
 
 int main(void)
 {
-	InitWindow(game_area_x, game_area_y, "Suika Game");
-
+	InitWindow(window_width, window_height, "Suika Game");
+	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
 	Game game;
 	b2Vec2 gravity(0.0f, -40.0f);
 	shared_ptr<b2World> world(new b2World(gravity));
-	b2BodyDef groundBodyDef;
-	groundBodyDef.position.Set(0.0f, -10.0f);
-	b2Body *groundBody = world->CreateBody(&groundBodyDef);
-	b2PolygonShape groundBox;
-	groundBox.SetAsBox(50.0f, 1.0f);
-
-	groundBody->CreateFixture(&groundBox, 0.0f);
 
 	SuikaFactory sf;
-	auto gm = shared_ptr<GEManager>(new GEManager);
-	shared_ptr<GEManager> p(gm);
+	shared_ptr<GEManager> game_manager = shared_ptr<GEManager>(new GEManager);
 	// contactlistener rlistener = contactlistener(p);
-	auto listener = make_shared<contactlistener>(contactlistener(p));
+	shared_ptr<contactlistener> listener = make_shared<contactlistener>(contactlistener(game_manager));
 
 	vector<shared_ptr<Box>> walls;
-	walls.push_back(shared_ptr<Box>(new Box(20+offset_x-100, 40+offset_y, 20, 720, true, world)));
-	walls.push_back(shared_ptr<Box>(new Box(window_width+offset_x/2-100, 40+offset_y, 20, 720, true, world)));
+	constexpr int w = 20;
+	walls.push_back(shared_ptr<Box>(new Box(0, 0, w, 820, true, world)));
+	walls.push_back(shared_ptr<Box>(new Box(game_area_x - w, 0, w, 820, true, world)));
+	walls.push_back(shared_ptr<Box>(new Box(0, 780, 800, 40, true, world)));
 
-	game.init(world, gm);
+	game.init(world, game_manager);
 	world->SetContactListener((b2ContactListener *)listener.get());
 
 	int32 velocityIterations = 6;
 	int32 positionIterations = 2;
-	int fps = 60;
+	int fps = 120;
 	SetTargetFPS(fps);
 	int points = 0;
 
-	unordered_map<Fruits::GE_Type, int> pointstable = {
-		{Fruits::BOX, 0},
-		{Fruits::TANGERINE, 1},
-		{Fruits::ORANGE, 2},
-		{Fruits::GRAPEFRUIT, 4},
-		{Fruits::MELON, 8},
-		{Fruits::SUIKA, 32},
-	};
-	auto calcPoints = [&pointstable](Fruits::GE_Type type)
-	{
-		if (pointstable.find(type) != pointstable.end())
-		{
-			return pointstable[type];
-		}
-		return 0;
-	};
+	// Calc points
+	auto getPointsForType = [&](Fruits::GE_Type type)
+	{if (pointstable.find(type) != pointstable.end()) return pointstable[type];
+		return 0; };
 
 	while (!WindowShouldClose())
 	{
@@ -88,41 +83,49 @@ int main(void)
 		ClearBackground(RAYWHITE);
 		world->Step(1 / float(fps), velocityIterations, positionIterations);
 
-		for (auto wall : walls)
+		Vector2 mouse = GetMousePosition();
+		if (!(mouse.x < offset_x + w || mouse.x > offset_x + game_area_x - w))
+			DrawMousePosition(mouse.x);
+		for (auto wall : walls) // Update walls
 		{
 			wall->update();
 			wall->draw();
 		}
-
-		for (auto pair : gm->geMap)
+		for (auto pair : game_manager->geMap) // Update all game elements
 		{
 			pair.second->update();
 			pair.second->draw();
-			points += calcPoints(pair.second->id()->type);
+			points += getPointsForType(pair.second->id()->type);
 		}
 
-		game.update(listener, gm, world);
+		game.update(listener, game_manager, world);
 
-		Vector2 mouse = GetMousePosition();
-		static float growth = 0;
-		static bool limit = true;
-		static float delta = 0;
+		static float GROWTH = 0.0;
+		static bool LIMIT = true;
+		static float DELTA = 0.0;
 		if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 		{
-			if (delta > 1.0 || !limit)
+			int x = int(mouse.x);
+			if (DELTA > 0.7 || !LIMIT) // You can spawn a new fruit
 			{
-				delta = 0.0;
-				 auto melon = SuikaFactory::create(getNextMelon(), mouse.x-offset_x, 20, world);
-				// auto melon = SuikaFactory::create(Fruits::TANGERINE, mouse.x, 20, world);
-				gm->insertGE(melon);
+				if (!(x < offset_x + w || x > offset_x + game_area_x - w)) // Guard case to ensure click is inside area.
+				{
+					DELTA = 0.0;
+					shared_ptr<Suika> melon =
+						SuikaFactory::create(getNextMelon(), x - offset_x, 20, world);
+					game_manager->insertGE(melon);
+				}
 			}
 			else
 			{
-				delta += GetFrameTime();
+				DELTA += GetFrameTime();
 			}
 		}
-		// drawGuideLines();
-		drawPoints(points);
+		// DrawGuideLines();
+		DrawPoints(points);
+		DrawNextMelon(previewNext());
+		DrawEvolution();
+
 		points = 0;
 		EndDrawing();
 	}

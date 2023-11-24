@@ -2,6 +2,7 @@
 #include "box2d.h"
 #include <memory>
 #include <map>
+#include <unordered_map>
 using namespace std;
 
 const int game_area_x = 800;

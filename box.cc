@@ -96,7 +96,7 @@ void Box::draw()
 void Box::update()
 {
 	b2Vec2 position = this->bodyref->GetPosition();
-	this->angle = this->bodyref->GetAngle() * (180.0 / M_PI);
+	this->angle = this->bodyref->GetAngle() * (180.0 / PI);
 	this->x = pixelXFromBox2d(position.x);
 	this->y = pixelYFromBox2d(position.y);
 	// this->bodyref->GetContactList()->contact-

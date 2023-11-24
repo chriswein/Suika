@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <cmath>
 #include <vector>
+#include <unordered_map>
 #include "helpers.hh"
 #include "box.hh"
 #include "suika.hh"

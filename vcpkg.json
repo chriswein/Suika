@@ -1,6 +1,9 @@
 {
   "dependencies": [
-    "raylib",
+    {
+      "name":"raylib",
+      "features": ["hidpi", "use-audio"]
+    },
     "box2d"
   ]
 }

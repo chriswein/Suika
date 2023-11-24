@@ -28,4 +28,5 @@ public:
 	void draw() override;
 	void update() override;
 	shared_ptr<GE_Id> id() override;
+	Position getPosition() override;
 };

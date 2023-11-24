@@ -74,4 +74,5 @@ Game::Game(/* args */)
 
 Game::~Game()
 {
+    UnloadSound(this->sound);
 }

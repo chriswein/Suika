@@ -52,6 +52,11 @@ typedef struct GE_Id
 	Fruits::GE_Type type;
 } GE_Id;
 
+typedef struct Position {
+	int x;
+	int y;
+} Position;
+
 class GE
 {
 public:
@@ -61,6 +66,7 @@ public:
 	virtual void draw(){};
 	virtual void update(){};
 	virtual shared_ptr<GE_Id> id() { return shared_ptr<GE_Id>(nullptr); };
+	virtual Position getPosition(){return{0,0};};
 };
 
 class GEManager

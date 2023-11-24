@@ -109,3 +109,7 @@ void Box::update()
 shared_ptr<GE_Id> Box::id(){
 	return this->gid;
 }
+
+Position Box::getPosition(){
+	return {this->x, this->y};
+}

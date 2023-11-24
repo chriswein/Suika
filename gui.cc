@@ -48,8 +48,6 @@ void DrawMelon(int x, int y, Fruits::GE_Type next, float scale){
 
 void DrawNextMelon(Fruits::GE_Type next)
 {
-    using namespace Fruits;
-  
     constexpr int x = 1100;
     constexpr int y = 100;
     DrawText("Next: ",x-80,y-70,24,BLACK);
@@ -63,7 +61,7 @@ void DrawEvolution(){
     constexpr int height = 60;
     constexpr int x = 1100;
     constexpr int y = 600;
-    const float angle = -(360.0f/steps)*(PI/180.0f); 
+    constexpr float angle = -(360.0f/steps)*(PI/180.0f); 
     DrawText("Evolution: ",x-80,y-120,24,BLACK);
     for (size_t i = 0; i <= steps; i++)
     {
@@ -86,4 +84,16 @@ void DrawMousePosition(int x){
     a.x+=2;
     b.x+=2;
     DrawLineV(a,b,LIGHTGRAY);
+}
+
+void DrawGameOverProgress(float percent_to_game_over){
+    constexpr int width = 50;
+    constexpr int x = 60;
+    constexpr int y = 750;
+    DrawText("GameOver",x/2,y-width-30, 20,BLACK);
+    DrawCircleSector({x,y},width,0.0-90.0,360.0*percent_to_game_over-90.0,40, RED);
+}
+
+void DrawDeadZone(int end){
+    DrawRectangle(offset_x,offset_y, game_area_x,end, {255,255,255,123});
 }

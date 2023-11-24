@@ -11,6 +11,7 @@
 #include "gui.hh"
 
 using namespace std;
+constexpr int dead_zone_begin = 80;
 
 unordered_map<Fruits::GE_Type, int> pointstable = {
 	{Fruits::BOX, 0},
@@ -43,10 +44,31 @@ void DrawPoints(int points)
 	DrawText(string, 20, 20, 48, BLACK);
 }
 
+typedef struct GameOverStruct
+{
+	bool gameover = false;
+	float percent_to_game_over = 0.0f;
+} GameOverStruct;
+
+GameOverStruct IsGameOver(int highest, int delta)
+{
+	constexpr int time_to_game_over = 6000;
+	static int time_in_dead_zone = 0;
+
+	if (highest <= dead_zone_begin)
+		time_in_dead_zone += delta;
+	else
+		time_in_dead_zone = 0;
+
+	if (time_in_dead_zone > time_to_game_over)
+		return {true, 1.0f};
+	return {false, (float(time_in_dead_zone) / float(time_to_game_over))};
+}
+
 int main(void)
 {
 	InitWindow(window_width, window_height, "Suika Game");
-	  InitAudioDevice();
+	InitAudioDevice();
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
 	Game game;
 	b2Vec2 gravity(0.0f, -40.0f);
@@ -71,13 +93,14 @@ int main(void)
 	int fps = 120;
 	SetTargetFPS(fps);
 	int points = 0;
+	bool is_game_over = false;
 
 	// Calc points
 	auto getPointsForType = [&](Fruits::GE_Type type)
 	{if (pointstable.find(type) != pointstable.end()) return pointstable[type];
 		return 0; };
 
-	while (!WindowShouldClose())
+	while (!WindowShouldClose() && !is_game_over)
 	{
 
 		BeginDrawing();
@@ -92,11 +115,13 @@ int main(void)
 			wall->update();
 			wall->draw();
 		}
+		int highest = 800;
 		for (auto pair : game_manager->geMap) // Update all game elements
 		{
 			pair.second->update();
 			pair.second->draw();
 			points += getPointsForType(pair.second->id()->type);
+			highest = min(highest, pair.second->getPosition().y);
 		}
 
 		game.update(listener, game_manager, world);
@@ -123,14 +148,18 @@ int main(void)
 			}
 		}
 		// DrawGuideLines();
+		DrawDeadZone(dead_zone_begin);
 		DrawPoints(points);
 		DrawNextMelon(previewNext());
 		DrawEvolution();
-
+		GameOverStruct gos = IsGameOver(highest, int(GetFrameTime() * 1000));
+		is_game_over = gos.gameover;
+		DrawGameOverProgress(gos.percent_to_game_over);
+		
 		points = 0;
 		EndDrawing();
 	}
- CloseAudioDevice();     // Close audio device
+	CloseAudioDevice(); // Close audio device
 	CloseWindow();
 
 	world->SetContactListener((b2ContactListener *)nullptr); //

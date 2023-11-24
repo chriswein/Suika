@@ -70,7 +70,7 @@ int main(void)
 {
 	InitWindow(window_width, window_height, "Suika Game");
 	InitAudioDevice();
-	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
+	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 	Game game;
 	b2Vec2 gravity(0.0f, -40.0f);
 	shared_ptr<b2World> world(new b2World(gravity));

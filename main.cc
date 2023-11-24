@@ -100,11 +100,13 @@ int main(void)
 	auto getPointsForType = [&](Fruits::GE_Type type)
 	{if (pointstable.find(type) != pointstable.end()) return pointstable[type];
 		return 0; };
-
+	RenderTexture2D texture = LoadRenderTexture(window_width, window_height);
+	
 	while (!WindowShouldClose() && !is_game_over)
 	{
 
-		BeginDrawing();
+		BeginTextureMode(texture);
+
 		ClearBackground(RAYWHITE);
 		world->Step(1 / float(fps), velocityIterations, positionIterations);
 
@@ -156,8 +158,17 @@ int main(void)
 		GameOverStruct gos = IsGameOver(highest, int(GetFrameTime() * 1000));
 		is_game_over = gos.gameover;
 		DrawGameOverProgress(gos.percent_to_game_over);
-		
+
 		points = 0;
+		EndTextureMode();
+		BeginDrawing();
+		DrawTexturePro(
+			texture.texture,
+			Rectangle{0, 0, static_cast<float>(texture.texture.width), static_cast<float>(-texture.texture.height)},
+			Rectangle{0, 0, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight())},
+			Vector2{0, 0},
+			0,
+			WHITE);
 		EndDrawing();
 	}
 	CloseAudioDevice(); // Close audio device

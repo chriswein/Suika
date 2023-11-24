@@ -4,12 +4,12 @@
 #include <cmath>
 #include <vector>
 #include <unordered_map>
-#include "helpers.hh"
-#include "box.hh"
-#include "suika.hh"
-#include "contactlistener.hh"
-#include "game.hh"
-#include "gui.hh"
+#include "./src/helpers.hh"
+#include "./src/box.hh"
+#include "./src/suika.hh"
+#include "./src/contactlistener.hh"
+#include "./src/game.hh"
+#include "./src/gui.hh"
 
 using namespace std;
 constexpr int dead_zone_begin = 80;

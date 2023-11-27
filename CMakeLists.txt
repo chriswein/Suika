@@ -10,12 +10,13 @@ set(SOURCES main.cc box.cc helpers.cc suika.cc contactlistener.cc game.cc gui.cc
 
 set(CMAKE_CXX_STANDARD 14)
 add_executable(Suika ${SOURCES})
-
+#if(APPLE){
 target_link_libraries(Suika PRIVATE "-framework Cocoa")
 target_link_libraries(Suika PRIVATE "-framework CoreVideo")
 target_link_libraries(Suika PRIVATE "-framework IOKIT")
 target_link_libraries(Suika PRIVATE "-framework GLUT")
 target_link_libraries(Suika PRIVATE "-framework OpenGL")
+#}
 
 target_link_libraries(Suika PRIVATE raylib)
 target_link_libraries(Suika PRIVATE box2d::box2d)

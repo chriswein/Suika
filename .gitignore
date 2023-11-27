@@ -10,3 +10,4 @@ main.dSYM/Contents/Resources/DWARF/main
 suika
 /build/*
 my_app
+/data/*

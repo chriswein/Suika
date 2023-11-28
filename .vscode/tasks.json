@@ -18,6 +18,7 @@
                 "./src/game.cc",
                 "./src/contactlistener.cc",
                 "./src/gui.cc",
+                "./src/textures.cc",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],

@@ -2,26 +2,24 @@
 #undef ORANGE // Defined in raylib
 typedef struct parameters
 {
-    int radius;
-    Color color;
-    float weight;
+	int radius;
+	Color color;
+	float weight;
 } parameters;
 
 constexpr float baseweight = 200.0;
 constexpr int baseradius = 10;
 
-
-
 unordered_map<Fruits::GE_Type, parameters> values =
-    {
-        {Fruits::GRAPE, {1 * baseradius, PINK, 1.0f * baseweight}},
-        {Fruits::CHERRY, {2 * baseradius, GRAY, 1.1f * baseweight}},
-        {Fruits::STRAWBERRY, {3 * baseradius, LIGHTGRAY, 1.2f * baseweight}},
-        {Fruits::TANGERINE, {4 * baseradius, PURPLE, 2.3f * baseweight}},
-        {Fruits::ORANGE, {6 * baseradius, YELLOW, 2.5f * baseweight}},
-        {Fruits::GRAPEFRUIT, {8 * baseradius, BLUE, 3.0f * baseweight}},
-        {Fruits::MELON, {12 * baseradius, BLACK, 4.5f * baseweight}},
-        {Fruits::SUIKA, {16 * baseradius, GREEN, 5.0f * baseweight}}};
+	{
+		{Fruits::GRAPE, {1 * baseradius, PINK, 1.0f * baseweight}},
+		{Fruits::CHERRY, {2 * baseradius, GRAY, 1.1f * baseweight}},
+		{Fruits::STRAWBERRY, {3 * baseradius, LIGHTGRAY, 1.2f * baseweight}},
+		{Fruits::TANGERINE, {4 * baseradius, PURPLE, 2.3f * baseweight}},
+		{Fruits::ORANGE, {6 * baseradius, YELLOW, 2.5f * baseweight}},
+		{Fruits::GRAPEFRUIT, {8 * baseradius, BLUE, 3.0f * baseweight}},
+		{Fruits::MELON, {12 * baseradius, BLACK, 4.5f * baseweight}},
+		{Fruits::SUIKA, {16 * baseradius, GREEN, 5.0f * baseweight}}};
 
 Suika::Suika(int x, int y, int radius, shared_ptr<b2World> world) : Box(x, y, radius / 2, radius / 2)
 {
@@ -64,13 +62,25 @@ void Suika::init(shared_ptr<b2World> world)
 
 void Suika::draw()
 {
-	DrawCircle(this->x, this->y, this->radius, this->color);
-#ifdef DEBUG
-	char str[100];
-	DrawText(str, 50, 40, 20, BLACK);
-#endif
+	Fruits::GE_Type type = this->id()->type;
+	shared_ptr<Texture2D> texture_ptr = Textures().get((int)type);
+	if (texture_ptr != nullptr)
+	{
+		DrawTexturePro(
+			*texture_ptr,
+			{0.0, 0.0, float(texture_ptr->width), float(texture_ptr->height)},
+			{float(this->x), float(this->y), float(this->radius*2), float(this->radius*2)},
+			{float(this->radius), float(this->radius)},
+			-this->angle,
+			WHITE
+		);
+		
+	}
+	else
+	{
+		DrawCircle(this->x, this->y, this->radius, this->color);
+	}
 }
-
 
 void Suika::changeType(Fruits::GE_Type type)
 {
@@ -120,18 +130,16 @@ shared_ptr<Suika> SuikaFactory::create(Melon melon, int x, int y, shared_ptr<b2W
 	return a;
 }
 
-
 shared_ptr<Suika> SuikaFactory::create(Fruits::GE_Type type, int x, int y, shared_ptr<b2World> world)
 {
-	int x_ = x<0?values[type].radius:x;
+	int x_ = x < 0 ? values[type].radius : x;
 	shared_ptr<Suika> a = shared_ptr<Suika>(new Suika(x_, y, values[type].radius, world));
 	a->changeType(type);
 	return a;
 }
 
-
 Fruits::GE_Type getNextMelon()
-{	
+{
 	random_device rd;
 	mt19937 gen(rd());
 	uniform_int_distribution<> distr(1, 1 + (GE_Type_Max / 2));
@@ -152,8 +160,10 @@ Fruits::GE_Type getNextMelon()
 	return res;
 }
 
-Fruits::GE_Type previewNext(){
-	if (next_melons.empty()){
+Fruits::GE_Type previewNext()
+{
+	if (next_melons.empty())
+	{
 		getNextMelon();
 	}
 	return next_melons.front();

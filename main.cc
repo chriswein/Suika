@@ -10,6 +10,7 @@
 #include "./src/contactlistener.hh"
 #include "./src/game.hh"
 #include "./src/gui.hh"
+#include "./src/textures.hh"
 
 using namespace std;
 constexpr int dead_zone_begin = 80;
@@ -74,6 +75,15 @@ int main(void)
 	Game game;
 	b2Vec2 gravity(0.0f, -40.0f);
 	shared_ptr<b2World> world(new b2World(gravity));
+	Textures *t = new Textures();
+	t->load("./data/melonen_11.png", Fruits::GE_Type::GRAPE);
+	t->load("./data/melonen_01.png", Fruits::GE_Type::CHERRY);
+	t->load("./data/melonen_02.png", Fruits::GE_Type::STRAWBERRY);
+	t->load("./data/melonen_06.png", Fruits::GE_Type::TANGERINE);
+	t->load("./data/melonen_08.png", Fruits::GE_Type::ORANGE);
+	t->load("./data/melonen_09.png", Fruits::GE_Type::GRAPEFRUIT);
+	t->load("./data/melonen_10.png", Fruits::GE_Type::MELON);
+	t->load("./data/melonen_11.png", Fruits::GE_Type::SUIKA);
 
 	SuikaFactory sf;
 	shared_ptr<GEManager> game_manager = shared_ptr<GEManager>(new GEManager);
@@ -101,7 +111,7 @@ int main(void)
 	{if (pointstable.find(type) != pointstable.end()) return pointstable[type];
 		return 0; };
 	RenderTexture2D texture = LoadRenderTexture(window_width, window_height);
-	
+
 	while (!WindowShouldClose() && !is_game_over)
 	{
 

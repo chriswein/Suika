@@ -1,7 +1,7 @@
 #pragma once
 #include "suika.hh"
-// #include "helpers.hh"
 #include "raylib.h"
+#include "textures.hh"
 #include <math.h>
 
 void DrawNextMelon(Fruits::GE_Type melon);

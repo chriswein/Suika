@@ -3,8 +3,10 @@
 #include "box2d.h"
 #include "raylib.h"
 #include "helpers.hh"
+#include "textures.hh"
 #include <queue>
 #include <random>
+#include <unordered_map>
 
 #undef ORANGE
 

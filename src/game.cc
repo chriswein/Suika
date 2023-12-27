@@ -60,19 +60,37 @@ void Game::init(shared_ptr<b2World> world, shared_ptr<GEManager> gm)
     // gm->insertGE(dpc<GE>(shared_ptr<Box>((new Box(100, 100, 20, 20, world)))));
     // gm->insertGE(dpc<GE>(shared_ptr<Box>((new Box(300, 300, 20, 20, world)))));
     // gm->insertGE(dpc<GE>(shared_ptr<Box>((new Box(250, 100, 40, 40, world)))));
-    gm->insertGE(dpc<GE>(
-        SuikaFactory::create(Large, 200, 10, world)));
-    gm->insertGE(dpc<GE>(
-        SuikaFactory::create(Large, 600, 60, world)));
+    // gm->insertGE(dpc<GE>(
+    //     SuikaFactory::create(Large, 200, 10, world)));
+    // gm->insertGE(dpc<GE>(
+    //     SuikaFactory::create(Large, 600, 60, world)));
 }
 
 Game::Game(/* args */)
 {
-    Wave c = LoadWave("click.wav");
+    Wave c = LoadWave("./data/click.wav");
     this->sound = LoadSoundFromWave(c);
+   
 }
 
 Game::~Game()
 {
     UnloadSound(this->sound);
+}
+
+
+GameOverStruct IsGameOver(int highest, int delta)
+{
+	constexpr int time_to_game_over = 6000;
+
+	static int time_in_dead_zone = 0;
+
+	if (highest <= dead_zone_begin) // We are in the dead zone. Commence countdown.
+		time_in_dead_zone += delta;
+	else // Left zone of death.
+		time_in_dead_zone = 0;
+
+	if (time_in_dead_zone > time_to_game_over)
+		return {true, 1.0f};
+	return {false, (float(time_in_dead_zone) / float(time_to_game_over))};
 }

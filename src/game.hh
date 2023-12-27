@@ -9,7 +9,7 @@ class Game
 {
 private:
     static int points;
-   Sound sound; 
+   Sound sound;  
 public:
     Game(/* args */);
     ~Game();
@@ -17,3 +17,12 @@ public:
     void init(shared_ptr<b2World> world,shared_ptr<GEManager> gm);
 };
 
+typedef struct GameOverStruct
+{
+	bool gameover = false;
+	float percent_to_game_over = 0.0f;
+} GameOverStruct;
+
+GameOverStruct IsGameOver(int highest, int delta);
+
+constexpr int dead_zone_begin = 80;

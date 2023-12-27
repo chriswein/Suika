@@ -84,10 +84,6 @@ void Suika::draw()
 
 void Suika::changeType(Fruits::GE_Type type)
 {
-	using namespace Fruits;
-
-	auto apply = [](parameters p) {};
-
 	this->gid->type = type;
 	if (values.find(type) == values.end())
 		return;

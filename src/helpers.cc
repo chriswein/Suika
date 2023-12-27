@@ -72,7 +72,6 @@ void GEManager::deleteGE(int id) {
 
 void GEManager::printAllGEs() const {
     for (const auto& pair : this->geMap) {
-        int key = pair.first;
         shared_ptr<GE> ge = pair.second;
     }
 }

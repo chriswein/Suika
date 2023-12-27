@@ -7,7 +7,7 @@ using box2d.
 
 ## Screenshot
 
-![Example image](./data/screenshot.png)
+![Example image](screenshot.png)
 
 ## Notes
 
